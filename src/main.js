@@ -1,3 +1,5 @@
+'use strict';
+
 const COUNT_TASKS = 3;
 
 const createMenuTemplate = () =>
@@ -392,21 +394,25 @@ const createNewTaskTemplate = () =>
 const createMoreTemplate = () =>
   `<button class="load-more" type="button">load more</button>`;
 
-const renderItem = (container, template, place = 'beforeend') => {
+
+const renderItem = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
-}
+};
 
-const mainContainer = document.querySelector('.main');
+const mainContainer = document.querySelector(`.main`);
 
-const mainContainerControl = mainContainer.querySelector('.main__control');
+const mainContainerControl = mainContainer.querySelector(`.main__control`);
+
 renderItem(mainContainerControl, createMenuTemplate());
 
 renderItem(mainContainer, createFiltersTemplate());
 
 renderItem(mainContainer, createTasksBoardTemplate());
 
-const tasksBoardContainer = mainContainer.querySelector('.board');
-const tasksContainer = tasksBoardContainer.querySelector('.board__tasks');
+
+const tasksBoardContainer = mainContainer.querySelector(`.board`);
+const tasksContainer = tasksBoardContainer.querySelector(`.board__tasks`);
+
 
 renderItem(tasksContainer, createNewTaskTemplate());
 
