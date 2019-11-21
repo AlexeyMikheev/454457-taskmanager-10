@@ -418,3 +418,7 @@ for (let i = 0; i < COUNT_TASKS; i++) {
 
 renderItem(tasksBoardContainer, createMoreTemplate());
 
+}
+
+renderItem(tasksBoardContainer, createMoreTemplate());
+
