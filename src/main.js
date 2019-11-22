@@ -1,7 +1,7 @@
 
 import {createMenuTemplate} from './components/menu.js';
 import {createFiltersTemplate} from './components/filters.js';
-import {createTasksBoardTemplate, createTaskTemplate, createNewTaskTemplate} from './components/taskBoard.js';
+import {createTasksBoardTemplate, createTaskTemplate, createNewTaskTemplate} from './components/task-board.js';
 import {createMoreTemplate} from './components/more.js';
 
 const COUNT_TASKS = 3;
