@@ -1,6 +1,7 @@
 
 import {createMenuTemplate} from './components/menu.js';
 import {createFiltersTemplate} from './components/filters.js';
+import {generateFilters} from './mock/filter.js';
 import {createTasksBoardTemplate, createTaskTemplate, createNewTaskTemplate} from './components/task-board.js';
 import {createMoreTemplate} from './components/more.js';
 
@@ -15,7 +16,8 @@ const mainContainer = document.querySelector(`.main`);
 const mainContainerControl = mainContainer.querySelector(`.main__control`);
 renderItem(mainContainerControl, createMenuTemplate());
 
-renderItem(mainContainer, createFiltersTemplate());
+const filtersItems = generateFilters();
+renderItem(mainContainer, createFiltersTemplate(filtersItems));
 
 renderItem(mainContainer, createTasksBoardTemplate());
 
