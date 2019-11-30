@@ -1,7 +1,15 @@
 const LIMIT_VALUE = 0.5;
 const MIN_ITEMS = 0;
 
+const clearFilters = () =>{
+  let filtersContainer = document.querySelector(`.main__filter.filter.container`);
+  if (filtersContainer !== null) {
+    filtersContainer.remove();
+  }
+};
+
 const createFilterTemplate = (filter) => {
+
   const {name, count} = filter;
   let filterChecked = Math.random() > LIMIT_VALUE;
   const filterDisabled = count <= MIN_ITEMS;
@@ -15,6 +23,8 @@ const createFilterTemplate = (filter) => {
 };
 
 const createFiltersTemplate = (filters) => {
+  clearFilters();
+
   let filtersTemplate = ``;
 
   filters.forEach((filter) => {

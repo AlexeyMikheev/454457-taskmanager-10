@@ -16,3 +16,13 @@ export const MonthNames = [
   `November`,
   `December`,
 ];
+
+export const Filters = {
+  ALL: `all`,
+  OVERDUE: `overdue`,
+  TODAY: `today`,
+  FAVORITES: `favorites`,
+  REPEATING: `repeating`,
+  TAGS: `tags`,
+  ARCHIVE: `archive`
+};
