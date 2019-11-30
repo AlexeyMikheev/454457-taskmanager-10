@@ -1,14 +1,52 @@
 
 import {createMenuTemplate} from './components/menu.js';
 import {createFiltersTemplate} from './components/filters.js';
-import {generateFilters} from './mock/filter.js';
-import {createTasksBoardTemplate, createTaskTemplate, createNewTaskTemplate} from './components/task-board.js';
-import {createMoreTemplate} from './components/more.js';
+import {createTasksBoardTemplate, createTasksTemplate} from './components/task-board.js';
+import {createTaskEditTemplate} from './components/task-edit.js';
+import {createMoreTemplate} from './components/more';
 
-const COUNT_TASKS = 3;
+import {generateFilters} from './mock/filter.js';
+import {createTasks} from './mock/task.js';
+
+const ALL_TASKS_COUNT = 10;
+const ONE_TASKS_PAGE_COUNT = 8;
 
 const renderItem = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
+};
+
+const getTasksByPageNumber = (tasks, pageNumber, countTasks = ONE_TASKS_PAGE_COUNT) =>{
+  const startIndex = pageNumber * countTasks;
+  const endIndex = startIndex + countTasks;
+  return tasks.slice(startIndex, endIndex);
+};
+
+const renderTasksByPageNumber = (tasks, currentTasksPage) =>{
+  const pageTasks = getTasksByPageNumber(tasks, currentTasksPage);
+  renderItem(tasksContainer, createTasksTemplate(pageTasks));
+};
+
+const getMoreButtonVisibility = () => {
+  return (currentTasksPage + 1) * ONE_TASKS_PAGE_COUNT < tasks.length;
+};
+
+const addMoreButton = () => {
+  const tasksBoardContainer = mainContainer.querySelector(`.board`);
+
+  if (getMoreButtonVisibility()) {
+    renderItem(tasksBoardContainer, createMoreTemplate());
+
+    const moreButton = tasksBoardContainer.querySelector(`.load-more`);
+    moreButton.addEventListener(`click`, () => {
+      currentTasksPage++;
+      renderTasksByPageNumber(displayedTask, currentTasksPage);
+
+      if (!getMoreButtonVisibility()) {
+        moreButton.remove();
+      }
+
+    });
+  }
 };
 
 const mainContainer = document.querySelector(`.main`);
@@ -16,18 +54,19 @@ const mainContainer = document.querySelector(`.main`);
 const mainContainerControl = mainContainer.querySelector(`.main__control`);
 renderItem(mainContainerControl, createMenuTemplate());
 
-const filtersItems = generateFilters();
-renderItem(mainContainer, createFiltersTemplate(filtersItems));
+const filters = generateFilters();
+renderItem(mainContainer, createFiltersTemplate(filters));
 
 renderItem(mainContainer, createTasksBoardTemplate());
+const tasksContainer = mainContainer.querySelector(`.board__tasks`);
 
-const tasksBoardContainer = mainContainer.querySelector(`.board`);
-const tasksContainer = tasksBoardContainer.querySelector(`.board__tasks`);
+let currentTasksPage = 0;
 
-renderItem(tasksContainer, createNewTaskTemplate());
+const tasks = createTasks(ALL_TASKS_COUNT);
 
-for (let i = 0; i < COUNT_TASKS; i++) {
-  renderItem(tasksContainer, createTaskTemplate());
-}
+const [editableDisplayedTask, ...displayedTask] = tasks;
+renderItem(tasksContainer, createTaskEditTemplate(editableDisplayedTask));
 
-renderItem(tasksBoardContainer, createMoreTemplate());
+renderTasksByPageNumber(displayedTask, currentTasksPage);
+
+addMoreButton();
