@@ -63,7 +63,7 @@ const fillFiltersValues = (filters, tasks) =>{
     if (filter.name === Filters.OVERDUE) {
       filter.count = tasks.reduce((total, task) =>{
         if (task.dueDate !== null && task.dueDate.valueOf() < currentDate.valueOf()) {
-          filter.count++;
+          total++;
         }
         return total;
       }, filter.count);
@@ -72,7 +72,7 @@ const fillFiltersValues = (filters, tasks) =>{
     if (filter.name === Filters.TODAY) {
       filter.count = tasks.reduce((total, task) =>{
         if (task.dueDate !== null && task.dueDate.getDate() === currentDate.getDate()) {
-          filter.count++;
+          total++;
         }
         return total;
       }, filter.count);
