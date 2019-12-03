@@ -1,4 +1,4 @@
-import {Colors, Days, MonthNames} from '../const.js';
+import {Colors, DAYS, MONTHS} from '../const.js';
 import {formatTime} from '../utils.js';
 
 const createColorsMarkup = (colors, currentColor) => {
@@ -46,8 +46,8 @@ const createRepeatingDaysMarkup = (days, repeatingDays) => {
 
 const createHashtags = (tags) => {
   return Array.from(tags).map((tag) => {
-      return (
-        `<span class="card__hashtag-inner">
+    return (
+      `<span class="card__hashtag-inner">
           <input
             type="hidden"
             name="hashtag"
@@ -64,9 +64,8 @@ const createHashtags = (tags) => {
             delete
           </button>
         </span>`
-      );
-    })
-    .join(`\n`);
+    );
+  }).join(`\n`);
 };
 
 export const createTaskEditTemplate = (task) => {
@@ -75,7 +74,7 @@ export const createTaskEditTemplate = (task) => {
   const isExpired = dueDate instanceof Date && dueDate < Date.now();
   const isDateShowing = !!dueDate;
 
-  const date = isDateShowing ? `${dueDate.getDate()} ${MonthNames[dueDate.getMonth()]}` : ``;
+  const date = isDateShowing ? `${dueDate.getDate()} ${MONTHS[dueDate.getMonth()]}` : ``;
   const time = isDateShowing ? formatTime(dueDate) : ``;
 
   const isRepeatingTask = Object.values(repeatingDays).some(Boolean);
@@ -84,7 +83,7 @@ export const createTaskEditTemplate = (task) => {
 
   const tagsMarkup = createHashtags(tags);
   const colorsMarkup = createColorsMarkup(Colors, color);
-  const repeatingDaysMarkup = createRepeatingDaysMarkup(Days, repeatingDays);
+  const repeatingDaysMarkup = createRepeatingDaysMarkup(DAYS, repeatingDays);
 
   return (
     `<article class="card card--edit card--${color} ${repeatClass} ${deadlineClass}">
@@ -128,7 +127,7 @@ export const createTaskEditTemplate = (task) => {
                     repeat:<span class="card__repeat-status">${isRepeatingTask ? `yes` : `no`}</span>
                   </button>
 
-                  ${isRepeatingTask ?`<fieldset class="card__repeat-days">
+                  ${isRepeatingTask ? `<fieldset class="card__repeat-days">
                       <div class="card__repeat-days-inner">
                         ${repeatingDaysMarkup}
                       </div>

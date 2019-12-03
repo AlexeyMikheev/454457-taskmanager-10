@@ -1,4 +1,4 @@
-import {MonthNames} from '../const.js';
+import {MONTHS} from '../const.js';
 import {formatTime} from '../utils.js';
 
 const createTasksBoardTemplate = () =>
@@ -33,7 +33,7 @@ const createTaskTemplate = (task) => {
   const isDateShowing = dueDate !== null;
   const isExpired = isDateShowing && dueDate.valueOf() < Date.now().valueOf();
 
-  const date = isDateShowing ? `${dueDate.getDate()} ${MonthNames[dueDate.getMonth()]}` : ``;
+  const date = isDateShowing ? `${dueDate.getDate()} ${MONTHS[dueDate.getMonth()]}` : ``;
   const time = isDateShowing ? formatTime(dueDate) : ``;
 
   const hashtags = createHashtagsMarkup(Array.from(tags));

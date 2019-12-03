@@ -1,8 +1,8 @@
 const Colors = [`black`, `yellow`, `blue`, `green`, `pink`];
 
-const Days = [`mo`, `tu`, `we`, `th`, `fr`, `sa`, `su`];
+const DAYS = [`mo`, `tu`, `we`, `th`, `fr`, `sa`, `su`];
 
-const MonthNames = [
+const MONTHS = [
   `January`,
   `February`,
   `March`,
@@ -27,4 +27,7 @@ const Filters = {
   ARCHIVE: `archive`
 };
 
-export {Colors, Days, MonthNames, Filters};
+const ALL_TASKS_COUNT = 22;
+const ONE_TASKS_PAGE_COUNT = 8;
+
+export {Colors, DAYS, MONTHS, Filters, ALL_TASKS_COUNT, ONE_TASKS_PAGE_COUNT};
