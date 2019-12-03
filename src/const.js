@@ -1,4 +1,4 @@
-const Colors = [`black`, `yellow`, `blue`, `green`, `pink`];
+const COLORS = [`black`, `yellow`, `blue`, `green`, `pink`];
 
 const DAYS = [`mo`, `tu`, `we`, `th`, `fr`, `sa`, `su`];
 
@@ -30,4 +30,4 @@ const Filters = {
 const ALL_TASKS_COUNT = 22;
 const ONE_TASKS_PAGE_COUNT = 8;
 
-export {Colors, DAYS, MONTHS, Filters, ALL_TASKS_COUNT, ONE_TASKS_PAGE_COUNT};
+export {COLORS, DAYS, MONTHS, Filters, ALL_TASKS_COUNT, ONE_TASKS_PAGE_COUNT};

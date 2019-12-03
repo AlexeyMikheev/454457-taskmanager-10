@@ -1,4 +1,4 @@
-import {Colors} from '../const.js';
+import {COLORS} from '../const.js';
 
 const RANDOM_LIMIT = 0.5;
 const MIN_RANDOM_NUMBER = 0;
@@ -79,7 +79,7 @@ const createTask = () => {
     dueDate,
     repeatingDays: dueDate !== null ? DefaultRepeatingDays : createRepeatingDays(),
     tags: new Set(createTags(Tags, MIN_TAGS_COUNT, MAX_TAGS_COUNT)),
-    color: getRandomItem(Colors),
+    color: getRandomItem(COLORS),
     isFavorite: getRandomBoolean(),
     isArchive: getRandomBoolean(),
   };
