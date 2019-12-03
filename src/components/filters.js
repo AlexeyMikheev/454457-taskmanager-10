@@ -1,4 +1,5 @@
-const LIMIT_VALUE = 0.5;
+import {getRandomBoolean} from '../utils.js';
+
 const MIN_ITEMS = 0;
 
 const clearFilters = () =>{
@@ -11,7 +12,7 @@ const clearFilters = () =>{
 const createFilterTemplate = (filter) => {
 
   const {name, count} = filter;
-  let filterChecked = Math.random() > LIMIT_VALUE;
+  let filterChecked = getRandomBoolean();
   const filterDisabled = count <= MIN_ITEMS;
 
   if (filterDisabled) {
@@ -25,11 +26,10 @@ const createFilterTemplate = (filter) => {
 const createFiltersTemplate = (filters) => {
   clearFilters();
 
-  let filtersTemplate = ``;
-
-  filters.forEach((filter) => {
-    filtersTemplate += createFilterTemplate(filter);
-  });
+  const filtersTemplate = filters.reduce((template, filter) => {
+    template += createFilterTemplate(filter);
+    return template;
+  }, ``);
 
   return `<section class="main__filter filter container">${filtersTemplate}</section>`;
 };

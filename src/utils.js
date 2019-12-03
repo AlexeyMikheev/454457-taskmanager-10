@@ -1,8 +1,32 @@
-import {Filters, DAYS, ONE_TASKS_PAGE_COUNT} from './const.js';
+import {Filters, DAYS, ONE_TASKS_PAGE_COUNT, RANDOM_LIMIT, MIN_RANDOM_NUMBER, DIRECTION_POSITIVE, DIRECTION_NEGATIVE, MIN_DAY_LIMIT, MAX_DAY_LIMIT} from './const.js';
 import {createTasksTemplate} from './components/task-board.js';
 
 const getFormatedValue = (value) => {
   return value < 10 ? `0${value}` : String(value);
+};
+
+const getRandomNumber = (min, max) => {
+  return Math.floor((max - min) * Math.random());
+};
+
+const getRandomBoolean = () => {
+  return Math.random() > RANDOM_LIMIT;
+};
+
+const getRandomDate = () => {
+  const currentDate = new Date();
+
+  const directionDay = getRandomBoolean() ? DIRECTION_POSITIVE : DIRECTION_NEGATIVE;
+  const day = directionDay * getRandomNumber(MIN_DAY_LIMIT, MAX_DAY_LIMIT);
+
+  currentDate.setDate(currentDate.getDate() + day);
+
+  return currentDate;
+};
+
+const getRandomItem = (items) => {
+  const index = getRandomNumber(MIN_RANDOM_NUMBER, items.length);
+  return items[index];
 };
 
 const formatTime = (date) => {
@@ -92,4 +116,4 @@ const renderTasksByPageNumber = (container, tasks, currentTasksPage) =>{
   renderItem(container, createTasksTemplate(pageTasks));
 };
 
-export {formatTime, getFilterValue, renderItem, renderTasksByPageNumber};
+export {formatTime, getFilterValue, renderItem, renderTasksByPageNumber, getRandomBoolean, getRandomDate, getRandomItem};

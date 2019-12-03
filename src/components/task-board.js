@@ -90,13 +90,10 @@ const createTaskTemplate = (task) => {
 };
 
 const createTasksTemplate = (tasks) =>{
-  let tasksTemplate = ``;
-
-  tasks.forEach((filter) => {
+  return tasks.reduce((tasksTemplate, filter) => {
     tasksTemplate += createTaskTemplate(filter);
-  });
-
-  return tasksTemplate;
+    return tasksTemplate;
+  }, ``);
 };
 
 export {createTasksBoardTemplate, createTasksTemplate};
