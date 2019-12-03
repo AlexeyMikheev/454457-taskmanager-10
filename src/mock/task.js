@@ -1,16 +1,4 @@
-import {COLORS} from '../const.js';
-
-const RANDOM_LIMIT = 0.5;
-const MIN_RANDOM_NUMBER = 0;
-
-const DIRECTION_POSITIVE = 1;
-const DIRECTION_NEGATIVE = -1;
-
-const MIN_DAY_LIMIT = 0;
-const MAX_DAY_LIMIT = 7;
-
-const MIN_TAGS_COUNT = 0;
-const MAX_TAGS_COUNT = 3;
+import {COLORS, RANDOM_LIMIT, MIN_RANDOM_NUMBER, DIRECTION_POSITIVE, DIRECTION_NEGATIVE, MIN_DAY_LIMIT, MAX_DAY_LIMIT, MIN_TAGS_COUNT, MAX_TAGS_COUNT} from '../const.js';
 
 const DescriptionItems = [
   `Изучить теорию`,
