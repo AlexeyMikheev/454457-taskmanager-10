@@ -1,16 +1,6 @@
 import {MONTHS} from '../const.js';
-import {formatTime} from '../utils.js';
 
-const createTasksBoardTemplate = () =>
-  `<section class="board container">
-<div class="board__filter-list">
-<a href="#" class="board__filter">SORT BY DEFAULT</a>
-<a href="#" class="board__filter">SORT BY DATE up</a>
-<a href="#" class="board__filter">SORT BY DATE down</a>
-</div>
-
-<div class="board__tasks"></div>
-</section>`;
+import Utils from "../utils.js";
 
 const createHashtagsMarkup = (hashtags) => {
   return hashtags
@@ -34,7 +24,7 @@ const createTaskTemplate = (task) => {
   const isExpired = isDateShowing && dueDate.valueOf() < Date.now().valueOf();
 
   const date = isDateShowing ? `${dueDate.getDate()} ${MONTHS[dueDate.getMonth()]}` : ``;
-  const time = isDateShowing ? formatTime(dueDate) : ``;
+  const time = isDateShowing ? Utils.formatTime(dueDate) : ``;
 
   const hashtags = createHashtagsMarkup(Array.from(tags));
   const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
@@ -89,11 +79,49 @@ const createTaskTemplate = (task) => {
   );
 };
 
-const createTasksTemplate = (tasks) =>{
-  return tasks.reduce((tasksTemplate, filter) => {
-    tasksTemplate += createTaskTemplate(filter);
-    return tasksTemplate;
-  }, ``);
-};
+export default class Task {
 
-export {createTasksBoardTemplate, createTasksTemplate};
+  constructor(task) {
+    this._task = task;
+    this.init();
+    // this.initClickEvent();
+  }
+
+  init() {
+    if (!this._element) {
+      this._element = Utils.createElement(this.getTemplate());
+    }
+  }
+
+  // initClickEvent() {
+  //   this._element.addEventListener(`click`, this.onShowDetail());
+  // }
+
+  getTemplate() {
+    return createTaskTemplate(this._task);
+  }
+
+  get Element() {
+    return this._element;
+  }
+
+  // isClickAvaliable(classList) {
+  //   return classList.contains(`film-card__poster`) ||
+  //   classList.contains(`film-card__comments`) ||
+  //   classList.contains(`film-card__title`);
+  // }
+
+  // onShowDetail() {
+  //   return (evt) => {
+  //     if (this.isClickAvaliable(evt.target.classList)) {
+  //       new FilmDeatil(this._film).render(document.body);
+  //     }
+  //   };
+  // }
+
+  remove() {
+    // this._element.removeEventListener(`click`, this.onShowDetail());
+    this._element.remove();
+    this._element = null;
+  }
+}

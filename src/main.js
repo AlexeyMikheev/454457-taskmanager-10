@@ -1,64 +1,66 @@
 
 import {ALL_TASKS_COUNT, ONE_TASKS_PAGE_COUNT} from './const.js';
-import {getFilterValue, renderItem, renderTasksByPageNumber} from './utils.js';
-import {createMenuTemplate} from './components/menu.js';
-import {createFiltersTemplate} from './components/filters.js';
-import {createTasksBoardTemplate} from './components/task-board.js';
-import {createTaskEditTemplate} from './components/task-edit.js';
-import {createMoreTemplate} from './components/more';
+import Menu from './components/menu.js';
+import MenuFilter from './components/menu-filter';
+import Tasks from './components/tasks.js';
+import MoreButton from './components/more-button.js';
+import Sort from './components/sort.js';
+import Utils from "./utils.js";
 
 import {generateFilters} from './mock/filter.js';
 import {createTasks} from './mock/task.js';
 
+
 const getMoreButtonVisibility = () => {
-  return (currentTasksPage + 1) * ONE_TASKS_PAGE_COUNT < tasks.length;
+  return (currentPage + 1) * ONE_TASKS_PAGE_COUNT < tasks.length;
 };
 
-const addMoreButton = () => {
-  const tasksBoardContainer = mainContainer.querySelector(`.board`);
-
+const addMoreButton = (parentContainer) => {
   if (getMoreButtonVisibility()) {
-    renderItem(tasksBoardContainer, createMoreTemplate());
 
-    const moreButton = tasksBoardContainer.querySelector(`.load-more`);
-    moreButton.addEventListener(`click`, () => {
-      currentTasksPage++;
-      renderTasksByPageNumber(tasksContainer, displayedTask, currentTasksPage);
+    const onMoreButtonClick = () => {
+      currentPage++;
+
+      const pageTasks = Utils.getTasksByPageNumber(tasks, currentPage);
+      tasksComponent.addTasks(pageTasks);
 
       if (!getMoreButtonVisibility()) {
         moreButton.remove();
       }
+    };
 
-    });
+    let moreButton = new MoreButton();
+    moreButton.initClickEvent(onMoreButtonClick);
+    moreButton.render(parentContainer);
   }
 };
 
-const refreshFilters = (pageTasks) => {
+const initHeader = (pageTasks) => {
+  new Menu().render(mainContainerControl);
+  new Sort().render(Tasks.TasksContainer);
+
   const currentDate = new Date();
 
   filters.forEach((filter) => {
-    filter.count = getFilterValue(filter, pageTasks, currentDate);
+    filter.count = Utils.getFilterValue(filter, pageTasks, currentDate);
   });
-  renderItem(mainContainer, createFiltersTemplate(filters), `afterBegin`);
+
+  new MenuFilter(filters).render(mainContainer);
 };
 
 const mainContainer = document.querySelector(`.main`);
-
 const mainContainerControl = mainContainer.querySelector(`.main__control`);
-renderItem(mainContainerControl, createMenuTemplate());
-
-renderItem(mainContainer, createTasksBoardTemplate());
-const tasksContainer = mainContainer.querySelector(`.board__tasks`);
-
-let currentTasksPage = 0;
 
 const tasks = createTasks(ALL_TASKS_COUNT);
 const filters = generateFilters();
 
-const [editableDisplayedTask, ...displayedTask] = tasks;
-refreshFilters(displayedTask);
-renderItem(tasksContainer, createTaskEditTemplate(editableDisplayedTask));
+Tasks.renderContainer(mainContainer);
+let currentPage = 0;
 
-renderTasksByPageNumber(tasksContainer, displayedTask, currentTasksPage);
+initHeader(tasks);
 
-addMoreButton();
+const firstTasks = Utils.getTasksByPageNumber(tasks, currentPage);
+const tasksComponent = Tasks.createInstance(firstTasks);
+tasksComponent.render();
+
+addMoreButton(Tasks.TasksContainer);
