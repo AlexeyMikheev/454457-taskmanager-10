@@ -174,6 +174,7 @@ export default class TaskEdit {
     this._element = null;
     this._form = null;
     this._onCloseFormCb = null;
+    this._onDocumentKeyDownCb = null;
   }
 
   getElement() {
@@ -191,15 +192,14 @@ export default class TaskEdit {
 
   initCloseEvents(cb) {
     this._onSubmitFormCb = cb;
-    document.addEventListener(`keydown`, this.getOnDocumentKeyDown());
-  }
 
-  getOnDocumentKeyDown(evt) {
-    return (evt) => {
+    this._onDocumentKeyDownCb = (evt) => {
       if (evt.keyCode === ESC_KEY) {
         this._onSubmitFormCb();
       }
     };
+
+    document.addEventListener(`keydown`, this._onDocumentKeyDownCb);
   }
 
   removeElement() {
@@ -207,6 +207,7 @@ export default class TaskEdit {
     this._onSubmitFormCb = null;
     this._form = null;
     this._element = null;
-    document.removeEventListener(`keydown`, this.getOnDocumentKeyDown());
+    document.removeEventListener(`keydown`, this._onDocumentKeyDownCb);
+    this._onDocumentKeyDownCb = null;
   }
 }

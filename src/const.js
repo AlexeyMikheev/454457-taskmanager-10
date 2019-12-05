@@ -1,8 +1,8 @@
-const COLORS = [`black`, `yellow`, `blue`, `green`, `pink`];
+export const COLORS = [`black`, `yellow`, `blue`, `green`, `pink`];
 
-const DAYS = [`mo`, `tu`, `we`, `th`, `fr`, `sa`, `su`];
+export const DAYS = [`mo`, `tu`, `we`, `th`, `fr`, `sa`, `su`];
 
-const MONTHS = [
+export const MONTHS = [
   `January`,
   `February`,
   `March`,
@@ -17,7 +17,7 @@ const MONTHS = [
   `December`,
 ];
 
-const Filters = {
+export const Filters = {
   ALL: `all`,
   OVERDUE: `overdue`,
   TODAY: `today`,
@@ -27,28 +27,28 @@ const Filters = {
   ARCHIVE: `archive`
 };
 
-const ALL_TASKS_COUNT = 22;
-const ONE_TASKS_PAGE_COUNT = 8;
+export const ALL_TASKS_COUNT = 22;
+export const ONE_TASKS_PAGE_COUNT = 8;
 
-const RANDOM_LIMIT = 0.5;
-const MIN_RANDOM_NUMBER = 0;
+export const RANDOM_LIMIT = 0.5;
+export const MIN_RANDOM_NUMBER = 0;
 
-const DIRECTION_POSITIVE = 1;
-const DIRECTION_NEGATIVE = -1;
+export const DIRECTION_POSITIVE = 1;
+export const DIRECTION_NEGATIVE = -1;
 
-const MIN_DAY_LIMIT = 0;
-const MAX_DAY_LIMIT = 7;
+export const MIN_DAY_LIMIT = 0;
+export const MAX_DAY_LIMIT = 7;
 
-const MIN_TAGS_COUNT = 0;
-const MAX_TAGS_COUNT = 3;
+export const MIN_TAGS_COUNT = 0;
+export const MAX_TAGS_COUNT = 3;
 
-const DESCRIPTION_ITEMS = [
+export const DESCRIPTION_ITEMS = [
   `Изучить теорию`,
   `Сделать домашку`,
   `Пройти интенсив на соточку`,
 ];
 
-const TAGS = [
+export const TAGS = [
   `homework`,
   `theory`,
   `practice`,
@@ -56,11 +56,9 @@ const TAGS = [
   `keks`
 ];
 
-const RenderPosition = {
+export const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`
 };
 
 export const ESC_KEY = 27;
-
-export {COLORS, DAYS, MONTHS, Filters, ALL_TASKS_COUNT, ONE_TASKS_PAGE_COUNT, RANDOM_LIMIT, MIN_RANDOM_NUMBER, DIRECTION_POSITIVE, DIRECTION_NEGATIVE, MIN_DAY_LIMIT, MAX_DAY_LIMIT, MIN_TAGS_COUNT, MAX_TAGS_COUNT, DESCRIPTION_ITEMS, TAGS, RenderPosition};

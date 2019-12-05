@@ -1,4 +1,4 @@
-import { MONTHS } from '../const.js';
+import {MONTHS} from '../const.js';
 
 import Utils from "../utils.js";
 import TaskEdit from "./task-edit";
@@ -19,7 +19,7 @@ const createHashtagsMarkup = (hashtags) => {
 
 const getTemplate = (task) => {
 
-  const { description, tags, dueDate, color, repeatingDays } = task;
+  const {description, tags, dueDate, color, repeatingDays} = task;
 
   const isDateShowing = dueDate !== null;
   const isExpired = isDateShowing && dueDate.valueOf() < Date.now().valueOf();
@@ -86,7 +86,7 @@ export default class Task {
     this._task = task;
     this._element = null;
     this._form = null;
-    this._editButton = null; 
+    this._editButton = null;
     this._parentcontainer = null;
     this._editComponent = null;
   }
@@ -108,16 +108,16 @@ export default class Task {
   }
 
   onShowEdit() {
-    return (evt) => {
+    return () => {
       this._editComponent = new TaskEdit(this._task);
       this._parentcontainer.replaceChild(this._editComponent.getElement(), this._element);
-      this._editComponent.initSubmitEvent(this.onCloseEdit())
+      this._editComponent.initSubmitEvent(this.onCloseEdit());
       this._editComponent.initCloseEvents(this.onCloseEdit());
     };
   }
 
   onCloseEdit() {
-    return (evt) => {
+    return () => {
       this._parentcontainer.replaceChild(this._element, this._editComponent.getElement());
       this._editComponent.removeElement();
       this._editComponent = null;
