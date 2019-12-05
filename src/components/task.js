@@ -1,7 +1,7 @@
 import {MONTHS} from '../const.js';
 
-import Utils from "../utils.js";
-import TaskEdit from "./task-edit";
+import Utils from '../utils.js';
+import TaskEdit from './task-edit';
 
 const createHashtagsMarkup = (hashtags) => {
   return hashtags
@@ -104,16 +104,15 @@ export default class Task {
 
   initClickEvent() {
     this._editButton = this._element.querySelector(`.card__btn--edit`);
-    this._editButton.addEventListener(`click`, this.onShowEdit());
-  }
 
-  onShowEdit() {
-    return () => {
+    this._onShowEdit = () => {
       this._editComponent = new TaskEdit(this._task);
       this._parentcontainer.replaceChild(this._editComponent.getElement(), this._element);
       this._editComponent.initSubmitEvent(this.onCloseEdit());
       this._editComponent.initCloseEvents(this.onCloseEdit());
     };
+
+    this._editButton.addEventListener(`click`, this._onShowEdit);
   }
 
   onCloseEdit() {
@@ -125,7 +124,7 @@ export default class Task {
   }
 
   remove() {
-    this._editButton.removeEventListener(`click`, this.onShowEdit());
+    this._editButton.removeEventListener(`click`, this._onShowEdit);
     this._element.remove();
     this._element = null;
   }

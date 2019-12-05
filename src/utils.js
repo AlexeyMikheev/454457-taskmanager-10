@@ -48,68 +48,6 @@ export default class Utils {
     return items[index];
   }
 
-  static getFilterValue(filter, tasks, currentDate) {
-
-    switch (filter.name) {
-      case Filters.ALL: return tasks.length;
-
-      case Filters.OVERDUE:
-        return tasks.reduce((total, task) => {
-          if (task.dueDate !== null && task.dueDate.valueOf() < currentDate.valueOf()) {
-            total++;
-          }
-          return total;
-        }, filter.count);
-
-      case Filters.TODAY:
-        return tasks.reduce((total, task) => {
-          if (task.dueDate !== null && task.dueDate.getDate() === currentDate.getDate()) {
-            total++;
-          }
-          return total;
-        }, filter.count);
-
-      case Filters.FAVORITES:
-        return tasks.reduce((total, task) => {
-          if (task.isFavorite) {
-            total++;
-          }
-          return total;
-        }, filter.count);
-
-      case Filters.REPEATING:
-        return tasks.reduce((total, task) => {
-          DAYS.forEach((day) => {
-            if (task.repeatingDays !== null && task.repeatingDays[day] !== null) {
-              if (task.repeatingDays[day]) {
-                total++;
-              }
-            }
-          });
-
-          return total;
-        }, filter.count);
-
-      case Filters.TAGS:
-        return tasks.reduce((total, task) => {
-          if (task.tags !== null && task.tags.size > 0) {
-            total++;
-          }
-          return total;
-        }, filter.count);
-
-      case Filters.ARCHIVE:
-        return tasks.reduce((total, task) => {
-          if (task.isArchive) {
-            total++;
-          }
-          return total;
-        }, filter.count);
-
-      default: return filter.count;
-    }
-  }
-
   static formatTime(date) {
     const hours = this.getFormatedValue(date.getHours() % 12);
     const minutes = this.getFormatedValue(date.getMinutes());

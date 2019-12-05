@@ -185,17 +185,18 @@ export default class TaskEdit {
     return this._element;
   }
 
-  initSubmitEvent(onSubmitFormCb) {
+  initSubmitEvent(cb) {
+    this._onSubmitFormCb = cb;
     this._form = this._element.querySelector(`form`);
-    this._form.addEventListener(`submit`, onSubmitFormCb);
+    this._form.addEventListener(`submit`, this._onSubmitFormCb);
   }
 
   initCloseEvents(cb) {
-    this._onSubmitFormCb = cb;
+    this._onCloseFormCb = cb;
 
     this._onDocumentKeyDownCb = (evt) => {
       if (evt.keyCode === ESC_KEY) {
-        this._onSubmitFormCb();
+        this._onCloseFormCb();
       }
     };
 
@@ -204,10 +205,15 @@ export default class TaskEdit {
 
   removeElement() {
     this._element = null;
-    this._onSubmitFormCb = null;
+
+    this._form.removeEventListener(`submit`, this._onSubmitFormCb);
     this._form = null;
-    this._element = null;
+    this._onSubmitFormCb = null;
+
     document.removeEventListener(`keydown`, this._onDocumentKeyDownCb);
     this._onDocumentKeyDownCb = null;
+    this._onCloseFormCb = null;
+
+    this._element = null;
   }
 }
