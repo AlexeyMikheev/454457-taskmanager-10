@@ -1,11 +1,9 @@
-import {RenderPosition} from '../const.js';
-
 import Utils from "../utils.js";
 import Task from "./task.js";
 
-const createTasksContainerTemplate = () => `<section class="board container"></section>`;
+const getContainerTemplate = () => `<section class="board container"></section>`;
 
-const createTasksTemplate = () => `<div class="board__tasks"></div>`;
+const getTemplate = () => `<div class="board__tasks"></div>`;
 
 export default class Tasks {
   constructor(tasks, parentContainer) {
@@ -13,34 +11,17 @@ export default class Tasks {
     this._tasksComponents = null;
     this._tasks = tasks;
     this._parentContainer = parentContainer;
-
-    this.init();
   }
 
-  static renderContainer(container) {
+  static getTasksContainer() {
     if (!this._tasksContainer) {
-      this._tasksContainer = Utils.createElement(createTasksContainerTemplate());
+      this._tasksContainer = Utils.createElement(getContainerTemplate());
     }
-    Utils.render(container, this._tasksContainer);
-  }
-
-  static get TasksContainer() {
     return this._tasksContainer;
   }
 
   static createInstance(tasks) {
     return new this(tasks, this._tasksContainer);
-  }
-
-  init() {
-    this.initElement();
-    this.initComponets();
-  }
-
-  initElement() {
-    if (!this._element) {
-      this._element = Utils.createElement(this.getTemplate());
-    }
   }
 
   addTasks(tasks) {
@@ -55,7 +36,7 @@ export default class Tasks {
     });
 
     this._tasksComponents.forEach((component) => {
-      this._element.appendChild(component.Element);
+      this._element.appendChild(component.getElement());
     });
   }
 
@@ -67,17 +48,11 @@ export default class Tasks {
     this._tasksComponents = null;
   }
 
-
-  getTemplate() {
-    return createTasksTemplate();
-  }
-
-  get Element() {
+  getElement() {
+    if (!this._element) {
+      this._element = Utils.createElement(getTemplate());
+    }
     return this._element;
-  }
-
-  render() {
-    Utils.render(this._parentContainer, this._element, RenderPosition.BEFOREEND);
   }
 
   remove() {

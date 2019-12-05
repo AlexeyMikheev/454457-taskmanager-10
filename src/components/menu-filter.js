@@ -1,5 +1,4 @@
 import Utils from '../utils.js';
-import {RenderPosition} from "../const.js";
 
 const MIN_ITEMS = 0;
 
@@ -17,7 +16,7 @@ const createFilterContentTemplate = (filter) => {
     <label for="filter__${name}" class="filter__label">${name} <span class="filter__${name}-count">${count}</span></label>`;
 };
 
-const createFilterTemplate = (filters) => {
+const getTemplate = (filters) => {
 
   const filterContentTemplate = filters.reduce((template, filter) => {
     template += createFilterContentTemplate(filter);
@@ -31,20 +30,12 @@ export default class MenuFilter {
   constructor(filters) {
     this._element = null;
     this._filters = filters;
-    this.init();
   }
 
-  init() {
+  getElement() {
     if (!this._element) {
-      this._element = Utils.createElement(this.getTemplate());
+      this._element = Utils.createElement(getTemplate(this._filters));
     }
-  }
-
-  getTemplate() {
-    return createFilterTemplate(this._filters);
-  }
-
-  get Element() {
     return this._element;
   }
 
@@ -53,12 +44,6 @@ export default class MenuFilter {
     if (filtersContainer !== null) {
       filtersContainer.remove();
     }
-  }
-
-  render(container) {
-    this.removeExist();
-
-    Utils.render(container, this._element, RenderPosition.AFTERBEGIN);
   }
 
   remove() {

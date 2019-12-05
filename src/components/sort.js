@@ -1,7 +1,6 @@
 import Utils from '../utils.js';
-import {RenderPosition} from "../const.js";
 
-const createSortTemplate = () => {
+const getTemplate = () => {
   return (
     `<div class="board__filter-list">
       <a href="#" class="board__filter">SORT BY DEFAULT</a>
@@ -14,26 +13,13 @@ const createSortTemplate = () => {
 export default class Sort {
   constructor() {
     this._element = null;
-    this.init();
   }
 
-  init() {
+  getElement() {
     if (!this._element) {
-      this._element = Utils.createElement(this.getTemplate());
+      this._element = Utils.createElement(getTemplate());
     }
-  }
-
-  getTemplate() {
-    return createSortTemplate();
-  }
-
-  get Element() {
     return this._element;
-  }
-
-
-  render(container) {
-    Utils.render(container, this._element, RenderPosition.AFTERBEGIN);
   }
 
   remove() {

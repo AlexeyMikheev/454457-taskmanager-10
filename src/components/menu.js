@@ -1,8 +1,7 @@
 
 import Utils from "../utils.js";
-import {RenderPosition} from "../const.js";
 
-const createMenuTemplate = () =>
+const getTemplate = () =>
   `<section class="control__btn-wrap">
     <input type="radio"
       name="control"
@@ -26,25 +25,13 @@ const createMenuTemplate = () =>
 export default class Menu {
   constructor() {
     this._element = null;
-    this.init();
   }
 
-  init() {
+  getElement() {
     if (!this._element) {
-      this._element = Utils.createElement(this.getTemplate());
+      this._element = Utils.createElement(getTemplate());
     }
-  }
-
-  getTemplate() {
-    return createMenuTemplate();
-  }
-
-  get Element() {
     return this._element;
-  }
-
-  render(container) {
-    Utils.render(container, this._element, RenderPosition.BEFOREEND);
   }
 
   remove() {

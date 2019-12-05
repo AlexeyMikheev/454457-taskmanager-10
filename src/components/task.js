@@ -16,7 +16,7 @@ const createHashtagsMarkup = (hashtags) => {
     .join(`\n`);
 };
 
-const createTaskTemplate = (task) => {
+const getTemplate = (task) => {
 
   const {description, tags, dueDate, color, repeatingDays} = task;
 
@@ -83,25 +83,12 @@ export default class Task {
 
   constructor(task) {
     this._task = task;
-    this.init();
-    // this.initClickEvent();
   }
 
-  init() {
+  getElement() {
     if (!this._element) {
-      this._element = Utils.createElement(this.getTemplate());
+      this._element = Utils.createElement(getTemplate(this._task));
     }
-  }
-
-  // initClickEvent() {
-  //   this._element.addEventListener(`click`, this.onShowDetail());
-  // }
-
-  getTemplate() {
-    return createTaskTemplate(this._task);
-  }
-
-  get Element() {
     return this._element;
   }
 
