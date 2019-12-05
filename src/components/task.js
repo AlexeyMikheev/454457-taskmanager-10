@@ -1,6 +1,7 @@
-import {MONTHS} from '../const.js';
+import { MONTHS } from '../const.js';
 
 import Utils from "../utils.js";
+import TaskEdit from "./task-edit";
 
 const createHashtagsMarkup = (hashtags) => {
   return hashtags
@@ -18,7 +19,7 @@ const createHashtagsMarkup = (hashtags) => {
 
 const getTemplate = (task) => {
 
-  const {description, tags, dueDate, color, repeatingDays} = task;
+  const { description, tags, dueDate, color, repeatingDays } = task;
 
   const isDateShowing = dueDate !== null;
   const isExpired = isDateShowing && dueDate.valueOf() < Date.now().valueOf();
@@ -83,6 +84,11 @@ export default class Task {
 
   constructor(task) {
     this._task = task;
+    this._element = null;
+    this._form = null;
+    this._editButton = null; 
+    this._parentcontainer = null;
+    this._editComponent = null;
   }
 
   getElement() {
@@ -92,22 +98,34 @@ export default class Task {
     return this._element;
   }
 
-  // isClickAvaliable(classList) {
-  //   return classList.contains(`film-card__poster`) ||
-  //   classList.contains(`film-card__comments`) ||
-  //   classList.contains(`film-card__title`);
-  // }
+  set ParentContainer(value) {
+    this._parentcontainer = value;
+  }
 
-  // onShowDetail() {
-  //   return (evt) => {
-  //     if (this.isClickAvaliable(evt.target.classList)) {
-  //       new FilmDeatil(this._film).render(document.body);
-  //     }
-  //   };
-  // }
+  initClickEvent() {
+    this._editButton = this._element.querySelector(`.card__btn--edit`);
+    this._editButton.addEventListener(`click`, this.onShowEdit());
+  }
+
+  onShowEdit() {
+    return (evt) => {
+      this._editComponent = new TaskEdit(this._task);
+      this._parentcontainer.replaceChild(this._editComponent.getElement(), this._element);
+      this._editComponent.initSubmitEvent(this.onCloseEdit())
+      this._editComponent.initCloseEvents(this.onCloseEdit());
+    };
+  }
+
+  onCloseEdit() {
+    return (evt) => {
+      this._parentcontainer.replaceChild(this._element, this._editComponent.getElement());
+      this._editComponent.removeElement();
+      this._editComponent = null;
+    };
+  }
 
   remove() {
-    // this._element.removeEventListener(`click`, this.onShowDetail());
+    this._editButton.removeEventListener(`click`, this.onShowEdit());
     this._element.remove();
     this._element = null;
   }

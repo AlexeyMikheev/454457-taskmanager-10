@@ -1,5 +1,5 @@
-import {COLORS, DAYS, MONTHS} from '../const.js';
-import {formatTime} from '../utils.js';
+import {COLORS, DAYS, MONTHS, ESC_KEY} from '../const.js';
+import Utils from '../utils.js';
 
 const createColorsMarkup = (colors, currentColor) => {
   return colors
@@ -68,14 +68,14 @@ const createHashtags = (tags) => {
   }).join(`\n`);
 };
 
-export const createTaskEditTemplate = (task) => {
+export const getTemplate = (task) => {
   const {description, tags, dueDate, color, repeatingDays} = task;
 
   const isExpired = dueDate instanceof Date && dueDate < Date.now();
   const isDateShowing = !!dueDate;
 
   const date = isDateShowing ? `${dueDate.getDate()} ${MONTHS[dueDate.getMonth()]}` : ``;
-  const time = isDateShowing ? formatTime(dueDate) : ``;
+  const time = isDateShowing ? Utils.formatTime(dueDate) : ``;
 
   const isRepeatingTask = Object.values(repeatingDays).some(Boolean);
   const repeatClass = isRepeatingTask ? `card--repeat` : ``;
@@ -167,3 +167,46 @@ export const createTaskEditTemplate = (task) => {
       </article>`
   );
 };
+
+export default class TaskEdit {
+  constructor(task) {
+    this._task = task;
+    this._element = null;
+    this._form = null;
+    this._onCloseFormCb = null;
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = Utils.createElement(getTemplate(this._task));
+    }
+
+    return this._element;
+  }
+
+  initSubmitEvent(onSubmitFormCb) {
+    this._form = this._element.querySelector(`form`);
+    this._form.addEventListener(`submit`, onSubmitFormCb);
+  }
+
+  initCloseEvents(cb) {
+    this._onSubmitFormCb = cb;
+    document.addEventListener(`keydown`, this.getOnDocumentKeyDown());
+  }
+
+  getOnDocumentKeyDown(evt) {
+    return (evt) => {
+      if (evt.keyCode === ESC_KEY) {
+        this._onSubmitFormCb();
+      }
+    };
+  }
+
+  removeElement() {
+    this._element = null;
+    this._onSubmitFormCb = null;
+    this._form = null;
+    this._element = null;
+    document.removeEventListener(`keydown`, this.getOnDocumentKeyDown());
+  }
+}

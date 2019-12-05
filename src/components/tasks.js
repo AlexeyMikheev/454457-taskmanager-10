@@ -36,7 +36,10 @@ export default class Tasks {
     });
 
     this._tasksComponents.forEach((component) => {
+      this._element.parentContainer = this._element;
       this._element.appendChild(component.getElement());
+      component.ParentContainer = this._element;
+      component.initClickEvent();
     });
   }
 
