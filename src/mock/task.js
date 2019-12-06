@@ -29,7 +29,7 @@ const createTask = () => {
     tags: new Set(createTags(TAGS, MIN_TAGS_COUNT, MAX_TAGS_COUNT)),
     color: Utils.getRandomItem(COLORS),
     isFavorite: Utils.getRandomBoolean(),
-    isArchive: Utils.getRandomBoolean(),
+    isArchive: Utils.getRandomBoolean()
   };
 };
 
