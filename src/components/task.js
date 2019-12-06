@@ -1,16 +1,7 @@
 import {MONTHS} from '../const.js';
-import {formatTime} from '../utils.js';
 
-const createTasksBoardTemplate = () =>
-  `<section class="board container">
-<div class="board__filter-list">
-<a href="#" class="board__filter">SORT BY DEFAULT</a>
-<a href="#" class="board__filter">SORT BY DATE up</a>
-<a href="#" class="board__filter">SORT BY DATE down</a>
-</div>
-
-<div class="board__tasks"></div>
-</section>`;
+import Utils from '../utils.js';
+import TaskEdit from './task-edit';
 
 const createHashtagsMarkup = (hashtags) => {
   return hashtags
@@ -26,7 +17,7 @@ const createHashtagsMarkup = (hashtags) => {
     .join(`\n`);
 };
 
-const createTaskTemplate = (task) => {
+const getTemplate = (task) => {
 
   const {description, tags, dueDate, color, repeatingDays} = task;
 
@@ -34,7 +25,7 @@ const createTaskTemplate = (task) => {
   const isExpired = isDateShowing && dueDate.valueOf() < Date.now().valueOf();
 
   const date = isDateShowing ? `${dueDate.getDate()} ${MONTHS[dueDate.getMonth()]}` : ``;
-  const time = isDateShowing ? formatTime(dueDate) : ``;
+  const time = isDateShowing ? Utils.formatTime(dueDate) : ``;
 
   const hashtags = createHashtagsMarkup(Array.from(tags));
   const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
@@ -89,11 +80,52 @@ const createTaskTemplate = (task) => {
   );
 };
 
-const createTasksTemplate = (tasks) =>{
-  return tasks.reduce((tasksTemplate, filter) => {
-    tasksTemplate += createTaskTemplate(filter);
-    return tasksTemplate;
-  }, ``);
-};
+export default class Task {
 
-export {createTasksBoardTemplate, createTasksTemplate};
+  constructor(task) {
+    this._task = task;
+    this._element = null;
+    this._form = null;
+    this._editButton = null;
+    this._parentcontainer = null;
+    this._editComponent = null;
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = Utils.createElement(getTemplate(this._task));
+    }
+    return this._element;
+  }
+
+  set ParentContainer(value) {
+    this._parentcontainer = value;
+  }
+
+  initClickEvent() {
+    this._editButton = this._element.querySelector(`.card__btn--edit`);
+
+    this._onShowEdit = () => {
+      this._editComponent = new TaskEdit(this._task);
+      this._parentcontainer.replaceChild(this._editComponent.getElement(), this._element);
+      this._editComponent.initSubmitEvent(this.onCloseEdit());
+      this._editComponent.initCloseEvents(this.onCloseEdit());
+    };
+
+    this._editButton.addEventListener(`click`, this._onShowEdit);
+  }
+
+  onCloseEdit() {
+    return () => {
+      this._parentcontainer.replaceChild(this._element, this._editComponent.getElement());
+      this._editComponent.removeElement();
+      this._editComponent = null;
+    };
+  }
+
+  remove() {
+    this._editButton.removeEventListener(`click`, this._onShowEdit);
+    this._element.remove();
+    this._element = null;
+  }
+}

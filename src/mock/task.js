@@ -1,5 +1,5 @@
 import {COLORS, MIN_TAGS_COUNT, MAX_TAGS_COUNT, DESCRIPTION_ITEMS, TAGS} from '../const.js';
-import {getRandomBoolean, getRandomDate, getRandomItem} from '../utils.js';
+import Utils from '../utils.js';
 
 const DefaultRepeatingDays = {
   'mo': false,
@@ -12,7 +12,7 @@ const DefaultRepeatingDays = {
 };
 
 const createTags = (tags, min, max) => {
-  return tags.filter(getRandomBoolean).slice(min, max);
+  return tags.filter(Utils.getRandomBoolean).slice(min, max);
 };
 
 const createRepeatingDays = () => {
@@ -20,16 +20,16 @@ const createRepeatingDays = () => {
 };
 
 const createTask = () => {
-  const dueDate = getRandomBoolean() ? null : getRandomDate();
+  const dueDate = Utils.getRandomBoolean() ? null : Utils.getRandomDate();
 
   return {
-    description: getRandomItem(DESCRIPTION_ITEMS),
+    description: Utils.getRandomItem(DESCRIPTION_ITEMS),
     dueDate,
     repeatingDays: dueDate !== null ? DefaultRepeatingDays : createRepeatingDays(),
     tags: new Set(createTags(TAGS, MIN_TAGS_COUNT, MAX_TAGS_COUNT)),
-    color: getRandomItem(COLORS),
-    isFavorite: getRandomBoolean(),
-    isArchive: getRandomBoolean(),
+    color: Utils.getRandomItem(COLORS),
+    isFavorite: Utils.getRandomBoolean(),
+    isArchive: Utils.getRandomBoolean()
   };
 };
 
