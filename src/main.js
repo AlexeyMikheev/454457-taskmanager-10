@@ -6,7 +6,7 @@ import Tasks from './components/tasks.js';
 import MoreButton from './components/more-button.js';
 import Sort from './components/sort.js';
 import NoFilms from './components/no-tasks.js';
-import Utils from "./utils.js";
+import Utils from './utils.js';
 
 import {generateFilters} from './mock/filter.js';
 import {createTasks} from './mock/task.js';
