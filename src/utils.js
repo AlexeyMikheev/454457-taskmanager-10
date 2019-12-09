@@ -60,7 +60,7 @@ export default class Utils {
   static getTasksByPageNumber(tasks, pageNumber, countTasks = ONE_TASKS_PAGE_COUNT) {
     const startIndex = pageNumber * countTasks;
     const endIndex = startIndex + countTasks;
-    return tasks.slice(startIndex, endIndex);
+    return tasks.slice(0, endIndex);
   }
 
   static getFilterValue(filter, tasks, currentDate) {

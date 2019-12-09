@@ -1,66 +1,46 @@
 import Utils from "../utils.js";
 import Task from "./task.js";
+import AbstractComponent from './abstract-component.js';
 
-const getContainerTemplate = () => `<section class="board container"></section>`;
+const getTasksTemplate = () => `<div class="board__tasks"></div>`;
 
-const getTemplate = () => `<div class="board__tasks"></div>`;
-
-export default class Tasks {
-  constructor(tasks, parentContainer) {
-    this._element = null;
+export default class Tasks extends AbstractComponent {
+  constructor(tasks) {
+    super();
     this._tasksComponents = null;
     this._tasks = tasks;
-    this._parentContainer = parentContainer;
   }
 
-  static getTasksContainer() {
-    if (!this._tasksContainer) {
-      this._tasksContainer = Utils.createElement(getContainerTemplate());
-    }
-    return this._tasksContainer;
+  getTemplate() {
+    return getTasksTemplate();
   }
 
-  static createInstance(tasks) {
-    return new this(tasks, this._tasksContainer);
+  set tasks(value) {
+    this._tasks = value;
   }
 
-  addTasks(tasks) {
-    this._tasks.push(...tasks);
+  refreshComponents() {
     this.clearComponents();
     this.initComponets();
   }
 
-  initComponets() {
+  initComponets(cb) {
     this._tasksComponents = this._tasks.map((t) => {
       return new Task(t);
     });
 
     this._tasksComponents.forEach((component) => {
-      this._element.parentContainer = this._element;
       this._element.appendChild(component.getElement());
-      component.ParentContainer = this._element;
-      component.initClickEvent();
+      component.addClickEvent(cb);
     });
   }
 
   clearComponents() {
     this._tasksComponents.forEach((component) => {
-      component.remove();
+      component.removeClickEvent();
+      component.removeElement();
     });
 
     this._tasksComponents = null;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = Utils.createElement(getTemplate());
-    }
-    return this._element;
-  }
-
-  remove() {
-    this._element = null;
-    this._tasksContainer = null;
-    this.clearComponents();
   }
 }

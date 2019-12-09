@@ -1,6 +1,6 @@
-import Utils from '../utils.js';
+import AbstractComponent from './abstract-component.js';
 
-const getTemplate = () => {
+const getSortTemplate = () => {
   return (
     `<div class="board__filter-list">
       <a href="#" class="board__filter">SORT BY DEFAULT</a>
@@ -10,19 +10,12 @@ const getTemplate = () => {
   );
 };
 
-export default class Sort {
+export default class Sort extends AbstractComponent{
   constructor() {
-    this._element = null;
+    super();
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = Utils.createElement(getTemplate());
-    }
-    return this._element;
-  }
-
-  remove() {
-    this._element = null;
+  getTemplate() {
+    return getSortTemplate();
   }
 }
