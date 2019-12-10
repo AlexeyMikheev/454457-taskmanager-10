@@ -1,4 +1,5 @@
 import Utils from '../utils.js';
+import AbstractComponent from './abstract-component.js';
 
 const MIN_ITEMS = 0;
 
@@ -16,7 +17,7 @@ const createFilterContentTemplate = (filter) => {
     <label for="filter__${name}" class="filter__label">${name} <span class="filter__${name}-count">${count}</span></label>`;
 };
 
-const getTemplate = (filters) => {
+const getFilterTemplate = (filters) => {
 
   const filterContentTemplate = filters.reduce((template, filter) => {
     template += createFilterContentTemplate(filter);
@@ -26,17 +27,14 @@ const getTemplate = (filters) => {
   return `<section class="main__filter filter container">${filterContentTemplate}</section>`;
 };
 
-export default class MenuFilter {
+export default class MenuFilter extends AbstractComponent {
   constructor(filters) {
-    this._element = null;
+    super();
     this._filters = filters;
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = Utils.createElement(getTemplate(this._filters));
-    }
-    return this._element;
+  getTemplate() {
+    return getFilterTemplate(this._filters);
   }
 
   removeExist() {
@@ -44,9 +42,5 @@ export default class MenuFilter {
     if (filtersContainer !== null) {
       filtersContainer.remove();
     }
-  }
-
-  remove() {
-    this._element = null;
   }
 }

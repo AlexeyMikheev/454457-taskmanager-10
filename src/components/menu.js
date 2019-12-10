@@ -1,7 +1,7 @@
 
-import Utils from "../utils.js";
+import AbstractComponent from './abstract-component.js';
 
-const getTemplate = () =>
+const getMenuTemplate = () =>
   `<section class="control__btn-wrap">
     <input type="radio"
       name="control"
@@ -22,20 +22,13 @@ const getTemplate = () =>
       class="control__input visually-hidden"/>
     <label for="control__statistic" class="control__label">STATISTICS</label></section>`;
 
-export default class Menu {
+export default class Menu extends AbstractComponent {
   constructor() {
-    this._element = null;
+    super();
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = Utils.createElement(getTemplate());
-    }
-    return this._element;
-  }
-
-  remove() {
-    this._element = null;
+  getTemplate() {
+    return getMenuTemplate();
   }
 }
 

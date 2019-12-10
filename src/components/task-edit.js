@@ -1,5 +1,6 @@
 import {COLORS, DAYS, MONTHS, ESC_KEY} from '../const.js';
 import Utils from '../utils.js';
+import AbstractComponent from './abstract-component.js';
 
 const createColorsMarkup = (colors, currentColor) => {
   return colors
@@ -68,7 +69,7 @@ const createHashtags = (tags) => {
   }).join(`\n`);
 };
 
-export const getTemplate = (task) => {
+export const getTaskEditTemplate = (task) => {
   const {description, tags, dueDate, color, repeatingDays} = task;
 
   const isExpired = dueDate instanceof Date && dueDate < Date.now();
@@ -168,21 +169,17 @@ export const getTemplate = (task) => {
   );
 };
 
-export default class TaskEdit {
+export default class TaskEdit extends AbstractComponent {
   constructor(task) {
+    super();
     this._task = task;
-    this._element = null;
     this._form = null;
     this._onCloseFormCb = null;
     this._onDocumentKeyDownCb = null;
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = Utils.createElement(getTemplate(this._task));
-    }
-
-    return this._element;
+  getTemplate() {
+    return getTaskEditTemplate(this._task);
   }
 
   initSubmitEvent(cb) {
@@ -191,7 +188,7 @@ export default class TaskEdit {
     this._form.addEventListener(`submit`, this._onSubmitFormCb);
   }
 
-  initCloseEvents(cb) {
+  addCloseEvents(cb) {
     this._onCloseFormCb = cb;
 
     this._onDocumentKeyDownCb = (evt) => {
@@ -203,9 +200,7 @@ export default class TaskEdit {
     document.addEventListener(`keydown`, this._onDocumentKeyDownCb);
   }
 
-  removeElement() {
-    this._element = null;
-
+  removeCloseEvents() {
     this._form.removeEventListener(`submit`, this._onSubmitFormCb);
     this._form = null;
     this._onSubmitFormCb = null;
@@ -213,7 +208,5 @@ export default class TaskEdit {
     document.removeEventListener(`keydown`, this._onDocumentKeyDownCb);
     this._onDocumentKeyDownCb = null;
     this._onCloseFormCb = null;
-
-    this._element = null;
   }
 }

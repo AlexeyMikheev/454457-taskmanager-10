@@ -60,7 +60,7 @@ export default class Utils {
   static getTasksByPageNumber(tasks, pageNumber, countTasks = ONE_TASKS_PAGE_COUNT) {
     const startIndex = pageNumber * countTasks;
     const endIndex = startIndex + countTasks;
-    return tasks.slice(startIndex, endIndex);
+    return tasks.slice(0, endIndex);
   }
 
   static getFilterValue(filter, tasks, currentDate) {
@@ -127,5 +127,23 @@ export default class Utils {
 
   static getRandomBoolean() {
     return Math.random() > RANDOM_LIMIT;
+  }
+
+  static getSortedTasks(tasks, propertyName, byDesc = false) {
+    return tasks.slice().sort((prevFilm, nextFilm) => {
+      if (prevFilm[propertyName] === null) {
+        return byDesc ? 1 : -1;
+      }
+      if (nextFilm[propertyName] === null) {
+        return byDesc ? -1 : 1;
+      }
+      if (prevFilm[propertyName] > nextFilm[propertyName]) {
+        return byDesc ? 1 : -1;
+      }
+      if (prevFilm[propertyName] < nextFilm[propertyName]) {
+        return byDesc ? -1 : 1;
+      }
+      return 0;
+    });
   }
 }
