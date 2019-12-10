@@ -54,6 +54,35 @@ export default class BoardController {
       return (this._currentPage + 1) * ONE_TASKS_PAGE_COUNT < tasks.length;
     };
 
+    this._onMoreButtonClick = () => {
+      this._onCloseEdit();
+
+      this._currentPage++;
+
+      const sortedTasks = this.getTasks();
+
+      this._tasksComponent.tasks = sortedTasks;
+      this._tasksComponent.refreshComponents(this._onShowEdit);
+
+      if (!this._getMoreButtonVisibility()) {
+        this._moreButton.removeElement();
+      }
+    };
+
+    this._onSortButtonClick = (sortType) => {
+      this._sortType = sortType;
+
+      if (this._sortComponent !== null) {
+        this._sortComponent.selectedFilter = this._sortType;
+        this._sortComponent.refreshSortElements();
+
+        const sortedTasks = this.getTasks();
+
+        this._tasksComponent.tasks = sortedTasks;
+        this._tasksComponent.refreshComponents(this._onShowEdit);
+      }
+    };
+
     this.initHeader();
     this.initContent();
     this.addDocumentEvents();
@@ -78,6 +107,8 @@ export default class BoardController {
     const tasksContainer = new TasksContainer().getElement();
     Utils.render(this._mainContainer, tasksContainer);
 
+    this.initSort(tasksContainer);
+
     const hasActiveTasks = this._tasks.some((f) => {
       return !f.isArchive;
     });
@@ -96,30 +127,22 @@ export default class BoardController {
     Utils.render(tasksContainer, this._tasksComponent.getElement(), RenderPosition.BEFOREEND);
     this._tasksComponent.initComponets(this._onShowEdit);
 
-    this.addMoreButton(tasksContainer, this._tasksComponent);
+    this.initMoreButton(tasksContainer, this._tasksComponent);
   }
 
-  addMoreButton(parentContainer, tasksComponent) {
+  initMoreButton(parentContainer) {
     if (this._getMoreButtonVisibility()) {
-
-      const onMoreButtonClick = () => {
-        this._onCloseEdit();
-
-        this._currentPage++;
-
-        const pageTasks = Utils.getTasksByPageNumber(this._tasks, this._currentPage);
-        tasksComponent.tasks = pageTasks;
-        tasksComponent.refreshComponents(this._onShowEdit);
-
-        if (!this._getMoreButtonVisibility()) {
-          this._moreButton.removeElement();
-        }
-      };
 
       this._moreButton = new MoreButton();
       Utils.render(parentContainer, this._moreButton.getElement());
-      this._moreButton.initClickEvent(onMoreButtonClick);
+      this._moreButton.initClickEvent(this._onMoreButtonClick);
     }
+  }
+
+  initSort(parentContainer) {
+    Utils.render(parentContainer, this._sortComponent.getElement());
+    this._sortComponent.renderSortElements();
+    this._sortComponent.addSortEvent(this._onSortButtonClick);
   }
 
   addDocumentEvents() {
@@ -128,5 +151,22 @@ export default class BoardController {
         this._onCloseEdit();
       }
     });
+  }
+
+  getSortedTasks(sortType, tasks) {
+    switch (sortType) {
+      case SortTypes.DEFAULT:
+        return tasks;
+      case SortTypes.DATEDOWN:
+        return Utils.getSortedTasks(tasks, `dueDate`);
+      case SortTypes.DATEUP:
+        return Utils.getSortedTasks(tasks, `dueDate`, true);
+      default: return tasks;
+    }
+  }
+
+  getTasks() {
+    const pageFilms = Utils.getTasksByPageNumber(this._tasks, this._currentPage);
+    return this.getSortedTasks(this._sortType, pageFilms);
   }
 }

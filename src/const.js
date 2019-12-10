@@ -64,6 +64,7 @@ export const RenderPosition = {
 export const ESC_KEY = 27;
 
 export const SortTypes = {
-  UPDATE: 0,
-  DOWNDATE: 1
+  DEFAULT: 0,
+  DATEUP: 1,
+  DATEDOWN: 2
 };

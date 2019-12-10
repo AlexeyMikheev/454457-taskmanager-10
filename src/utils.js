@@ -128,4 +128,22 @@ export default class Utils {
   static getRandomBoolean() {
     return Math.random() > RANDOM_LIMIT;
   }
+
+  static getSortedTasks(tasks, propertyName, byDesc = false) {
+    return tasks.slice().sort((prevFilm, nextFilm) => {
+      if (prevFilm[propertyName] === null) {
+        return byDesc ? 1 : -1;
+      }
+      if (nextFilm[propertyName] === null) {
+        return byDesc ? -1 : 1;
+      }
+      if (prevFilm[propertyName] > nextFilm[propertyName]) {
+        return byDesc ? 1 : -1;
+      }
+      if (prevFilm[propertyName] < nextFilm[propertyName]) {
+        return byDesc ? -1 : 1;
+      }
+      return 0;
+    });
+  }
 }
