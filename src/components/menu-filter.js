@@ -5,7 +5,7 @@ const MIN_ITEMS = 0;
 
 const createFilterContentTemplate = (filter) => {
 
-  const { name, count } = filter;
+  const {name, count} = filter;
   let filterChecked = Utils.getRandomBoolean();
   const filterDisabled = count <= MIN_ITEMS;
 

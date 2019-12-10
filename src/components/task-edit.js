@@ -1,4 +1,4 @@
-import { COLORS, DAYS, MONTHS, ESC_KEY } from '../const.js';
+import {COLORS, DAYS, MONTHS, ESC_KEY} from '../const.js';
 import Utils from '../utils.js';
 import AbstractComponent from './abstract-component.js';
 
@@ -70,7 +70,7 @@ const createHashtags = (tags) => {
 };
 
 export const getTaskEditTemplate = (task) => {
-  const { description, tags, dueDate, color, repeatingDays } = task;
+  const {description, tags, dueDate, color, repeatingDays} = task;
 
   const isExpired = dueDate instanceof Date && dueDate < Date.now();
   const isDateShowing = !!dueDate;

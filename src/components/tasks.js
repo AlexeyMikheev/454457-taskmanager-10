@@ -1,4 +1,3 @@
-import Utils from "../utils.js";
 import Task from "./task.js";
 import AbstractComponent from './abstract-component.js';
 
@@ -19,9 +18,9 @@ export default class Tasks extends AbstractComponent {
     this._tasks = value;
   }
 
-  refreshComponents() {
+  refreshComponents(cb) {
     this.clearComponents();
-    this.initComponets();
+    this.initComponets(cb);
   }
 
   initComponets(cb) {

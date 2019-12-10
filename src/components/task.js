@@ -2,7 +2,6 @@ import AbstractComponent from './abstract-component.js';
 import {MONTHS} from '../const.js';
 
 import Utils from '../utils.js';
-import TaskEdit from './task-edit';
 
 const createHashtagsMarkup = (hashtags) => {
   return hashtags
@@ -100,27 +99,15 @@ export default class Task extends AbstractComponent {
   }
 
   addClickEvent(cb) {
-    this._editButton = this._element.querySelector(`.card__btn--edit`);
+    if (this._editButton === null) {
+      this._editButton = this._element.querySelector(`.card__btn--edit`);
+    }
 
     this._onShowEdit = () => {
       cb(this);
-      // this._editComponent = new TaskEdit(this._task);
-      // this._parentcontainer.replaceChild(this._editComponent.getElement(), this._element);
-      // this._editComponent.initSubmitEvent(this.onCloseEdit());
-      // this._editComponent.addCloseEvents(this.onCloseEdit());
     };
-
 
     this._editButton.addEventListener(`click`, this._onShowEdit);
-  }
-
-  onCloseEdit() {
-    return () => {
-      this._parentcontainer.replaceChild(this._element, this._editComponent.getElement());
-      this._editComponent.removeCloseEvents();
-      this._editComponent.removeElement();
-      this._editComponent = null;
-    };
   }
 
   removeClickEvent() {
