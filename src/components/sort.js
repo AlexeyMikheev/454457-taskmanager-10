@@ -1,6 +1,6 @@
 import AbstractComponent from './abstract-component.js';
-import {SortTypes} from '../const.js';
 import Utils from '../utils.js';
+import {SortTypes} from '../const.js';
 
 export const getSortFilterTemplate = (selectedFilter, sortFilter) => {
   const {value, text} = sortFilter;
