@@ -146,4 +146,10 @@ export default class Utils {
       return 0;
     });
   }
+
+  static getTaskyId(tasks, id) {
+    return tasks.find((task) => {
+      return task.id === id;
+    });
+  }
 }

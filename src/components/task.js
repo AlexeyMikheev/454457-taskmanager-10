@@ -19,7 +19,7 @@ const createHashtagsMarkup = (hashtags) => {
 
 const getTaskTemplate = (task) => {
 
-  const {description, tags, dueDate, color, repeatingDays} = task;
+  const {description, tags, dueDate, color, repeatingDays, isFavorite, isArchive} = task;
 
   const isDateShowing = dueDate !== null;
   const isExpired = isDateShowing && dueDate.valueOf() < Date.now().valueOf();
@@ -31,6 +31,9 @@ const getTaskTemplate = (task) => {
   const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
   const deadlineClass = isExpired ? `card--deadline` : ``;
 
+  const isFavoriteActiveClass = !isFavorite ? `card__btn--disabled` : ``;
+  const isArchiveActiveClass = !isArchive ? `card__btn--disabled` : ``;
+
   return (
     `<article class="card card--${color} ${repeatClass} ${deadlineClass}">
       <div class="card__form">
@@ -39,13 +42,11 @@ const getTaskTemplate = (task) => {
             <button type="button" class="card__btn card__btn--edit">
               edit
             </button>
-            <button type="button" class="card__btn card__btn--archive">
+            <button type="button" class="card__btn card__btn--archive" ${isFavoriteActiveClass}>
               archive
             </button>
             <button
-              type="button"
-              class="card__btn card__btn--favorites card__btn--disabled"
-            >
+              type="button" class="card__btn card__btn--favorites" ${isArchiveActiveClass}>
               favorites
             </button>
           </div>
@@ -85,25 +86,24 @@ export default class Task extends AbstractComponent {
   constructor(task) {
     super();
     this._task = task;
-    this._form = null;
-    this._editButton = null;
-    this._editComponent = null;
   }
 
   getTemplate() {
     return getTaskTemplate(this._task);
   }
 
-  get task() {
-    return this._task;
-  }
-
   addEditClickEvent(cb) {
-    this._editButton = this._element.querySelector(`.card__btn--edit`);
-    this._editButton.addEventListener(`click`, cb);
+    const editButton = this._element.querySelector(`.card__btn--edit`);
+    editButton.addEventListener(`click`, cb);
   }
 
-  // removeClickEvent() {
-  //   this._editButton.removeEventListener(`click`, this._onShowEdit);
-  // }
+  addArchiveClickEvent(cb) {
+    const archiveButton = this._element.querySelector(`.card__btn--archive`);
+    archiveButton.addEventListener(`click`, cb);
+  }
+
+  addFavoriteClickEvent(cb) {
+    const favoriteButton = this._element.querySelector(`.card__btn--favorites`);
+    favoriteButton.addEventListener(`click`, cb);
+  }
 }

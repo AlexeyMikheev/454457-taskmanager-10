@@ -26,7 +26,7 @@ export default class BoardController {
     this._tasksControllers = [];
 
     this._onDataChange = (taskController, oldValue, newValue) => {
-      const taskToUpdate = Utils.getFilmByid(this._films, oldValue.id);
+      const taskToUpdate = Utils.getTaskyId(this._tasks, oldValue.id);
 
       if (taskToUpdate !== null) {
         Object.assign(taskToUpdate, newValue);

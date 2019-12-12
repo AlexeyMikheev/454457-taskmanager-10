@@ -11,6 +11,16 @@ export default class TaskController {
     this._mode = TaskControllerMode.DEFAULT;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
+
+    this._onArchiveChange = (evt) => {
+      const isArchive = !evt.target.classList.contains(`card__btn--disabled`);
+      this._onDataChange(this, this._task, Object.assign({}, this._task, {isArchive}));
+    };
+
+    this._onFavoriteChange = (evt) => {
+      const isFavorite = !evt.target.classList.contains(`card__btn--disabled`);
+      this._onDataChange(this, this._task, Object.assign({}, this._task, {isFavorite}));
+    };
   }
 
   render(task) {
@@ -33,9 +43,18 @@ export default class TaskController {
     };
 
     this._task = task;
-    this._taskComponent = new Task(task);
-    this._container.appendChild(this._taskComponent.getElement());
+    if (this._taskComponent === null) {
+      this._taskComponent = new Task(this._task);
+      this._container.appendChild(this._taskComponent.getElement());
+    } else {
+      const newTaskComponent = new Task(this._task);
+      this._container.replaceChild(newTaskComponent.getElement(), this._taskComponent.getElement());
+      this._taskComponent = newTaskComponent;
+    }
+
     this._taskComponent.addEditClickEvent(this._onShowEdit);
+    this._taskComponent.addArchiveClickEvent(this._onArchiveChange);
+    this._taskComponent.addFavoriteClickEvent(this._onFavoriteChange);
   }
 
   removeComponents() {
