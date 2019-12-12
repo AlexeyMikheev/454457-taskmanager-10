@@ -11,6 +11,8 @@ const DefaultRepeatingDays = {
   'su': false,
 };
 
+let taskIdCounter = 0;
+
 const createTags = (tags, min, max) => {
   return tags.filter(Utils.getRandomBoolean).slice(min, max);
 };
@@ -22,7 +24,10 @@ const createRepeatingDays = () => {
 const createTask = () => {
   const dueDate = Utils.getRandomBoolean() ? null : Utils.getRandomDate();
 
+  const id = taskIdCounter++;
+
   return {
+    id,
     description: Utils.getRandomItem(DESCRIPTION_ITEMS),
     dueDate,
     repeatingDays: dueDate !== null ? DefaultRepeatingDays : createRepeatingDays(),

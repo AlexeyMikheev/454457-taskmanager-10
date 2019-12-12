@@ -1,4 +1,4 @@
-import {COLORS, DAYS, MONTHS, ESC_KEY} from '../const.js';
+import {COLORS, DAYS, MONTHS} from '../const.js';
 import Utils from '../utils.js';
 import AbstractComponent from './abstract-component.js';
 
@@ -188,25 +188,25 @@ export default class TaskEdit extends AbstractComponent {
     this._form.addEventListener(`submit`, this._onSubmitFormCb);
   }
 
-  addCloseEvents(cb) {
-    this._onCloseFormCb = cb;
+  // addCloseEvents(cb) {
+  //   this._onCloseFormCb = cb;
 
-    this._onDocumentKeyDownCb = (evt) => {
-      if (evt.keyCode === ESC_KEY) {
-        this._onCloseFormCb();
-      }
-    };
+  //   this._onDocumentKeyDownCb = (evt) => {
+  //     if (evt.keyCode === ESC_KEY) {
+  //       this._onCloseFormCb();
+  //     }
+  //   };
 
-    document.addEventListener(`keydown`, this._onDocumentKeyDownCb);
-  }
+  //   document.addEventListener(`keydown`, this._onDocumentKeyDownCb);
+  // }
 
-  removeCloseEvents() {
-    this._form.removeEventListener(`submit`, this._onSubmitFormCb);
-    this._form = null;
-    this._onSubmitFormCb = null;
+  // removeCloseEvents() {
+  //   this._form.removeEventListener(`submit`, this._onSubmitFormCb);
+  //   this._form = null;
+  //   this._onSubmitFormCb = null;
 
-    document.removeEventListener(`keydown`, this._onDocumentKeyDownCb);
-    this._onDocumentKeyDownCb = null;
-    this._onCloseFormCb = null;
-  }
+  //   document.removeEventListener(`keydown`, this._onDocumentKeyDownCb);
+  //   this._onDocumentKeyDownCb = null;
+  //   this._onCloseFormCb = null;
+  // }
 }

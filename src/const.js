@@ -68,3 +68,8 @@ export const SortTypes = {
   DATEUP: 1,
   DATEDOWN: 2
 };
+
+export const TaskControllerMode = {
+  DEFAULT: `default`,
+  EDIT: `edit`,
+};

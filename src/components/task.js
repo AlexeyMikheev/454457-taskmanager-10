@@ -98,19 +98,12 @@ export default class Task extends AbstractComponent {
     return this._task;
   }
 
-  addClickEvent(cb) {
-    if (this._editButton === null) {
-      this._editButton = this._element.querySelector(`.card__btn--edit`);
-    }
-
-    this._onShowEdit = () => {
-      cb(this);
-    };
-
-    this._editButton.addEventListener(`click`, this._onShowEdit);
+  addEditClickEvent(cb) {
+    this._editButton = this._element.querySelector(`.card__btn--edit`);
+    this._editButton.addEventListener(`click`, cb);
   }
 
-  removeClickEvent() {
-    this._editButton.removeEventListener(`click`, this._onShowEdit);
-  }
+  // removeClickEvent() {
+  //   this._editButton.removeEventListener(`click`, this._onShowEdit);
+  // }
 }

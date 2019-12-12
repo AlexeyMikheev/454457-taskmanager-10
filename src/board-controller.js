@@ -2,12 +2,12 @@ import {ONE_TASKS_PAGE_COUNT, RenderPosition, SortTypes, ESC_KEY} from './const.
 import Menu from './components/menu.js';
 import MenuFilter from './components/menu-filter';
 import Tasks from './components/tasks.js';
-import TaskEdit from './components/task-edit';
 import TasksContainer from './components/tasks-container.js';
 import MoreButton from './components/more-button.js';
 import Sort from './components/sort.js';
 import NoFilms from './components/no-tasks.js';
 import Utils from './utils.js';
+import TaskController from './task-controller.js';
 
 export default class BoardController {
   constructor(mainContainer, mainContainerControl) {
@@ -21,48 +21,35 @@ export default class BoardController {
 
     this._sortComponent = new Sort(this._sortType);
     this._tasksComponent = null;
-    this._taskEditComponent = null;
-    this._taskEditableComponent = null;
+    this._tasksComponentElement = null;
     this._moreButton = null;
-  }
-  render(tasks, filters) {
-    this._tasks = tasks;
-    this._filters = filters;
+    this._tasksControllers = [];
 
-    this._onCloseEdit = () => {
-      if (this._taskEditComponent !== null && this._taskEditableComponent !== null) {
-        this._tasksComponent.getElement().replaceChild(this._taskEditableComponent.getElement(), this._taskEditComponent.getElement());
-        this._taskEditComponent.removeCloseEvents();
-        this._taskEditComponent.removeElement();
-        this._taskEditComponent = null;
-        this._taskEditableComponent = null;
+    this._onDataChange = (taskController, oldValue, newValue) => {
+      const taskToUpdate = Utils.getFilmByid(this._films, oldValue.id);
+
+      if (taskToUpdate !== null) {
+        Object.assign(taskToUpdate, newValue);
+        taskController.render(taskToUpdate);
       }
     };
 
-    this._onShowEdit = (taskComponent) => {
-      this._onCloseEdit();
-      this._taskEditComponent = new TaskEdit(taskComponent.task);
-
-      this._taskEditableComponent = taskComponent;
-
-      this._tasksComponent.getElement().replaceChild(this._taskEditComponent.getElement(), this._taskEditableComponent.getElement());
-      this._taskEditComponent.initSubmitEvent(this._onCloseEdit);
-      this._taskEditComponent.addCloseEvents(this._onCloseEdit);
+    this._onViewChange = () => {
+      this.setDefaultView();
     };
 
     this._getMoreButtonVisibility = () => {
-      return (this._currentPage + 1) * ONE_TASKS_PAGE_COUNT < tasks.length;
+      return (this._currentPage + 1) * ONE_TASKS_PAGE_COUNT < this._tasks.length;
     };
 
     this._onMoreButtonClick = () => {
-      this._onCloseEdit();
+      this.setDefaultView();
 
       this._currentPage++;
 
       const sortedTasks = this.getTasks();
 
-      this._tasksComponent.tasks = sortedTasks;
-      this._tasksComponent.refreshComponents(this._onShowEdit);
+      this.renderListTasks(this._tasksComponentElement, sortedTasks);
 
       if (!this._getMoreButtonVisibility()) {
         this._moreButton.removeElement();
@@ -78,14 +65,45 @@ export default class BoardController {
 
         const sortedTasks = this.getTasks();
 
-        this._tasksComponent.tasks = sortedTasks;
-        this._tasksComponent.refreshComponents(this._onShowEdit);
+        this.renderListTasks(this._tasksComponentElement, sortedTasks);
       }
     };
+  }
+  render(tasks, filters) {
+    this._tasks = tasks;
+    this._filters = filters;
 
     this.initHeader();
     this.initContent();
     this.addDocumentEvents();
+  }
+
+  renderListTasks(container, films) {
+    this.clearTasks(this._tasksControllers);
+    this._tasksControllers = [];
+    this.renderTasks(container, films, this._tasksControllers);
+  }
+
+  renderTasks(container, films, filmsControllers) {
+    films.forEach((film) => {
+      const taskController = new TaskController(container, this._onDataChange, this._onViewChange);
+      taskController.render(film);
+
+      filmsControllers.push(taskController);
+    });
+  }
+
+  clearTasks() {
+    this._tasksControllers.forEach((taskController) => {
+      taskController.removeComponents();
+      taskController = null;
+    });
+  }
+
+  setDefaultView() {
+    this._tasksControllers.forEach((filmController) => {
+      filmController.setDefaultView();
+    });
   }
 
   initHeader() {
@@ -123,9 +141,11 @@ export default class BoardController {
 
     const startPageTasks = Utils.getTasksByPageNumber(this._tasks, this._currentPage);
 
-    this._tasksComponent = new Tasks(startPageTasks);
-    Utils.render(tasksContainer, this._tasksComponent.getElement(), RenderPosition.BEFOREEND);
-    this._tasksComponent.initComponets(this._onShowEdit);
+    this._tasksComponent = new Tasks();
+    this._tasksComponentElement = this._tasksComponent.getElement();
+    Utils.render(tasksContainer, this._tasksComponentElement, RenderPosition.BEFOREEND);
+
+    this.renderListTasks(this._tasksComponentElement, startPageTasks);
 
     this.initMoreButton(tasksContainer, this._tasksComponent);
   }
@@ -148,7 +168,9 @@ export default class BoardController {
   addDocumentEvents() {
     document.addEventListener(`keydown`, (evt) => {
       if (evt.keyCode === ESC_KEY) {
-        this._onCloseEdit();
+        this._tasksControllers.forEach((taskController) => {
+          taskController.setDefaultView();
+        });
       }
     });
   }
