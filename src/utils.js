@@ -74,7 +74,7 @@ export default class Utils {
             total++;
           }
           return total;
-        }, filter.count);
+        }, 0);
 
       case Filters.TODAY:
         return tasks.reduce((total, task) => {
@@ -82,7 +82,7 @@ export default class Utils {
             total++;
           }
           return total;
-        }, filter.count);
+        }, 0);
 
       case Filters.FAVORITES:
         return tasks.reduce((total, task) => {
@@ -90,7 +90,7 @@ export default class Utils {
             total++;
           }
           return total;
-        }, filter.count);
+        }, 0);
 
       case Filters.REPEATING:
         return tasks.reduce((total, task) => {
@@ -103,7 +103,7 @@ export default class Utils {
           });
 
           return total;
-        }, filter.count);
+        }, 0);
 
       case Filters.TAGS:
         return tasks.reduce((total, task) => {
@@ -111,7 +111,7 @@ export default class Utils {
             total++;
           }
           return total;
-        }, filter.count);
+        }, 0);
 
       case Filters.ARCHIVE:
         return tasks.reduce((total, task) => {
@@ -119,7 +119,7 @@ export default class Utils {
             total++;
           }
           return total;
-        }, filter.count);
+        }, 0);
 
       default: return filter.count;
     }

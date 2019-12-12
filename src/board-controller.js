@@ -22,6 +22,7 @@ export default class BoardController {
     this._sortComponent = new Sort(this._sortType);
     this._tasksComponent = null;
     this._tasksComponentElement = null;
+    this._menuFilter = null;
     this._moreButton = null;
     this._tasksControllers = [];
 
@@ -31,6 +32,8 @@ export default class BoardController {
       if (taskToUpdate !== null) {
         Object.assign(taskToUpdate, newValue);
         taskController.render(taskToUpdate);
+
+        this.initMenuFilters();
       }
     };
 
@@ -107,18 +110,28 @@ export default class BoardController {
   }
 
   initHeader() {
+    this.initMenuFilters();
+
+    const menu = new Menu();
+    Utils.render(this._mainContainerControl, menu.getElement(), RenderPosition.BEFOREEND);
+  }
+
+  initMenuFilters() {
     const currentDate = new Date();
 
     this._filters.forEach((filter) => {
       filter.count = Utils.getFilterValue(filter, this._tasks, currentDate);
     });
 
-    const menuFilter = new MenuFilter(this._filters);
-    menuFilter.removeExist();
-    Utils.render(this._mainContainer, menuFilter.getElement(), RenderPosition.BEFOREEND);
-
-    const menu = new Menu();
-    Utils.render(this._mainContainerControl, menu.getElement(), RenderPosition.BEFOREEND);
+    if (this._menuFilter === null) {
+      this._menuFilter = new MenuFilter(this._filters);
+      this._menuFilter .removeExist();
+      Utils.render(this._mainContainer, this._menuFilter.getElement(), RenderPosition.BEFOREEND);
+    } else {
+      const newMenuFilter = new MenuFilter(this._filters);
+      this._mainContainer.replaceChild(newMenuFilter.getElement(), this._menuFilter.getElement());
+      this._menuFilter = newMenuFilter;
+    }
   }
 
   initContent() {

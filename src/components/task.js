@@ -31,8 +31,8 @@ const getTaskTemplate = (task) => {
   const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
   const deadlineClass = isExpired ? `card--deadline` : ``;
 
-  const isFavoriteActiveClass = !isFavorite ? `card__btn--disabled` : ``;
   const isArchiveActiveClass = !isArchive ? `card__btn--disabled` : ``;
+  const isFavoriteActiveClass = !isFavorite ? `card__btn--disabled` : ``;
 
   return (
     `<article class="card card--${color} ${repeatClass} ${deadlineClass}">
@@ -42,11 +42,11 @@ const getTaskTemplate = (task) => {
             <button type="button" class="card__btn card__btn--edit">
               edit
             </button>
-            <button type="button" class="card__btn card__btn--archive" ${isFavoriteActiveClass}>
+            <button type="button" class="card__btn card__btn--archive ${isArchiveActiveClass}">
               archive
             </button>
             <button
-              type="button" class="card__btn card__btn--favorites" ${isArchiveActiveClass}>
+              type="button" class="card__btn card__btn--favorites ${isFavoriteActiveClass}">
               favorites
             </button>
           </div>

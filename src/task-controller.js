@@ -13,12 +13,12 @@ export default class TaskController {
     this._onViewChange = onViewChange;
 
     this._onArchiveChange = (evt) => {
-      const isArchive = !evt.target.classList.contains(`card__btn--disabled`);
+      const isArchive = !!evt.target.classList.contains(`card__btn--disabled`);
       this._onDataChange(this, this._task, Object.assign({}, this._task, {isArchive}));
     };
 
     this._onFavoriteChange = (evt) => {
-      const isFavorite = !evt.target.classList.contains(`card__btn--disabled`);
+      const isFavorite = !!evt.target.classList.contains(`card__btn--disabled`);
       this._onDataChange(this, this._task, Object.assign({}, this._task, {isFavorite}));
     };
   }
