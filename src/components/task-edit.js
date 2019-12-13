@@ -225,29 +225,12 @@ export default class TaskEdit extends AbstractSmartComponent {
 
   rerender() {
     super.rerender();
-    // this._initFlatpickr();
   }
 
   recoveryListeners() {
     this._initEvents();
     this._initFormEvents();
   }
-
-  // _initFlatpickr() {
-  //   if (this._flatpickr) {
-  //     this._flatpickr.destroy();
-  //     this._flatpickr = null;
-  //   }
-
-  //   if (this._isDateShowing) {
-  // const dateElement = this.getElement().querySelector(`.card__date`);
-  // this._flatpickr = flatpickr(dateElement, {
-  //   altInput: true,
-  //   allowInput: true,
-  //   defaultDate: this._task.dueDate,
-  // });
-  //   }
-  // }
 
   _initFormEvents() {
     this._form = this._element.querySelector(`form`);
