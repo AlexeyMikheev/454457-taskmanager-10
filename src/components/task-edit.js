@@ -1,6 +1,7 @@
 import {COLORS, DAYS, MONTHS} from '../const.js';
 import Utils from '../utils.js';
 import AbstractSmartComponent from './abstract-smart-component.js';
+import flatpickr from 'flatpickr';
 
 const createColorsMarkup = (colors, currentColor) => {
   return colors
@@ -197,7 +198,6 @@ export default class TaskEdit extends AbstractSmartComponent {
     this._form = null;
 
     this._initEvents();
-    // this._applyFlatpickr();
   }
 
   getTemplate() {
@@ -274,26 +274,23 @@ export default class TaskEdit extends AbstractSmartComponent {
         this.rerender();
       });
     }
+
+    this._initFlatpickr();
   }
-  // addCloseEvents(cb) {
-  //   this._onCloseFormCb = cb;
 
-  //   this._onDocumentKeyDownCb = (evt) => {
-  //     if (evt.keyCode === ESC_KEY) {
-  //       this._onCloseFormCb();
-  //     }
-  //   };
+  _initFlatpickr() {
+    if (this._flatpickr) {
+      this._flatpickr.destroy();
+      this._flatpickr = null;
+    }
 
-  //   document.addEventListener(`keydown`, this._onDocumentKeyDownCb);
-  // }
-
-  // removeCloseEvents() {
-  //   this._form.removeEventListener(`submit`, this._onSubmitFormCb);
-  //   this._form = null;
-  //   this._onSubmitFormCb = null;
-
-  //   document.removeEventListener(`keydown`, this._onDocumentKeyDownCb);
-  //   this._onDocumentKeyDownCb = null;
-  //   this._onCloseFormCb = null;
-  // }
+    if (this._isDateShowing) {
+      const dateElement = this.getElement().querySelector(`.card__date`);
+      this._flatpickr = flatpickr(dateElement, {
+        altInput: true,
+        allowInput: true,
+        defaultDate: this._task.dueDate !== null ? this._task.dueDate : new Date(),
+      });
+    }
+  }
 }
