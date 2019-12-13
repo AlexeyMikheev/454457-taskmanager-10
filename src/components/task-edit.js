@@ -188,6 +188,7 @@ export default class TaskEdit extends AbstractSmartComponent {
 
     this._container = container;
 
+    this._dueDate = task.dueDate;
     this._isDateShowing = !!task.dueDate;
     this._isRepeatingTask = Object.values(task.repeatingDays).some(Boolean);
     this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
@@ -211,12 +212,12 @@ export default class TaskEdit extends AbstractSmartComponent {
     this._onSubmitFormCb = (evt) =>{
       evt.preventDefault();
 
+      const dueDate = this._dueDate;
       const isDateShowing = this._isDateShowing;
       const isRepeatingTask = this._isRepeatingTask;
       const repeatingDays = this._activeRepeatingDays;
-      const dateValue = this.getElement().querySelector(`.card__date`).value;
 
-      cb(Object.assign(this._task, {}, {isDateShowing, isRepeatingTask, repeatingDays}));
+      cb(Object.assign(this._task, {}, {dueDate, isDateShowing, isRepeatingTask, repeatingDays}));
     };
 
     this._initFormEvents();
@@ -224,7 +225,7 @@ export default class TaskEdit extends AbstractSmartComponent {
 
   rerender() {
     super.rerender();
-    this._initFlatpickr();
+    // this._initFlatpickr();
   }
 
   recoveryListeners() {
@@ -232,23 +233,21 @@ export default class TaskEdit extends AbstractSmartComponent {
     this._initFormEvents();
   }
 
-  _initFlatpickr() {
-    if (this._flatpickr) {
-      // При своем создании `flatpickr` дополнительно создает вспомогательные DOM-элементы.
-      // Что бы их удалять, нужно вызывать метод `destroy` у созданного инстанса `flatpickr`.
-      this._flatpickr.destroy();
-      this._flatpickr = null;
-    }
+  // _initFlatpickr() {
+  //   if (this._flatpickr) {
+  //     this._flatpickr.destroy();
+  //     this._flatpickr = null;
+  //   }
 
-    if (this._isDateShowing) {
-      const dateElement = this.getElement().querySelector(`.card__date`);
-      // this._flatpickr = flatpickr(dateElement, {
-      //   altInput: true,
-      //   allowInput: true,
-      //   defaultDate: this._task.dueDate,
-      // });
-    }
-  }
+  //   if (this._isDateShowing) {
+  // const dateElement = this.getElement().querySelector(`.card__date`);
+  // this._flatpickr = flatpickr(dateElement, {
+  //   altInput: true,
+  //   allowInput: true,
+  //   defaultDate: this._task.dueDate,
+  // });
+  //   }
+  // }
 
   _initFormEvents() {
     this._form = this._element.querySelector(`form`);
@@ -261,6 +260,12 @@ export default class TaskEdit extends AbstractSmartComponent {
     element.querySelector(`.card__date-deadline-toggle`)
       .addEventListener(`click`, () => {
         this._isDateShowing = !this._isDateShowing;
+
+        if (this._isDateShowing) {
+          this._dueDate = new Date();
+        } else {
+          this._dueDate = null;
+        }
 
         this.rerender();
       });
