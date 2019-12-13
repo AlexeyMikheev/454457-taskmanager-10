@@ -32,14 +32,19 @@ export default class TaskController {
       }
     };
 
+    this._onFormSubmit = (newValue) =>{
+      this._onCloseEdit();
+      this._onDataChange(this, this._task, Object.assign({}, this._task, newValue));
+    };
+
     this._onShowEdit = () => {
       this._mode = TaskControllerMode.EDIT;
 
       this._onViewChange();
 
-      this._taskEditComponent = new TaskEdit(this._task);
+      this._taskEditComponent = new TaskEdit(this._task, this._container);
       this._container.replaceChild(this._taskEditComponent.getElement(), this._taskComponent.getElement());
-      this._taskEditComponent.initSubmitEvent(this._onCloseEdit);
+      this._taskEditComponent.initSubmitEvent(this._onFormSubmit);
     };
 
     this._task = task;
