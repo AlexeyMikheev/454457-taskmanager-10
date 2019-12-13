@@ -85,7 +85,7 @@ export const getTaskEditTemplate = (task, options = {}) => {
 
   if (isDateShowing) {
     if (dueDate === null) {
-      date = new Date().valueOf();
+      dueDate = new Date();
     }
     date = `${dueDate.getDate()} ${MONTHS[dueDate.getMonth()]}`;
   }
@@ -214,21 +214,45 @@ export default class TaskEdit extends AbstractSmartComponent {
       const isDateShowing = this._isDateShowing;
       const isRepeatingTask = this._isRepeatingTask;
       const repeatingDays = this._activeRepeatingDays;
+      const dateValue = this.getElement().querySelector(`.card__date`).value;
 
       cb(Object.assign(this._task, {}, {isDateShowing, isRepeatingTask, repeatingDays}));
     };
 
-    this._form = this._element.querySelector(`form`);
-    this._form.addEventListener(`submit`, this._onSubmitFormCb);
+    this._initFormEvents();
   }
 
   rerender() {
     super.rerender();
-    // this._applyFlatpickr();
+    this._initFlatpickr();
   }
 
   recoveryListeners() {
     this._initEvents();
+    this._initFormEvents();
+  }
+
+  _initFlatpickr() {
+    if (this._flatpickr) {
+      // При своем создании `flatpickr` дополнительно создает вспомогательные DOM-элементы.
+      // Что бы их удалять, нужно вызывать метод `destroy` у созданного инстанса `flatpickr`.
+      this._flatpickr.destroy();
+      this._flatpickr = null;
+    }
+
+    if (this._isDateShowing) {
+      const dateElement = this.getElement().querySelector(`.card__date`);
+      // this._flatpickr = flatpickr(dateElement, {
+      //   altInput: true,
+      //   allowInput: true,
+      //   defaultDate: this._task.dueDate,
+      // });
+    }
+  }
+
+  _initFormEvents() {
+    this._form = this._element.querySelector(`form`);
+    this._form.addEventListener(`submit`, this._onSubmitFormCb);
   }
 
   _initEvents() {
@@ -244,6 +268,12 @@ export default class TaskEdit extends AbstractSmartComponent {
     element.querySelector(`.card__repeat-toggle`)
       .addEventListener(`click`, () => {
         this._isRepeatingTask = !this._isRepeatingTask;
+
+        if (!this._isRepeatingTask) {
+          Array.from(Object.keys(this._activeRepeatingDays)).forEach((key) => {
+            this._activeRepeatingDays[key] = false;
+          });
+        }
 
         this.rerender();
       });
