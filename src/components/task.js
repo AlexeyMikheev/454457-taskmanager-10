@@ -1,6 +1,5 @@
 import AbstractComponent from './abstract-component.js';
-import {MONTHS} from '../const.js';
-
+import {DUE_DATE_FORMAT, DUE_TIME_FORMAT} from '../const.js';
 import Utils from '../utils.js';
 
 const createHashtagsMarkup = (hashtags) => {
@@ -24,8 +23,8 @@ const getTaskTemplate = (task) => {
   const isDateShowing = dueDate !== null;
   const isExpired = isDateShowing && dueDate.valueOf() < Date.now().valueOf();
 
-  const date = isDateShowing ? `${dueDate.getDate()} ${MONTHS[dueDate.getMonth()]}` : ``;
-  const time = isDateShowing ? Utils.formatTime(dueDate) : ``;
+  const date = isDateShowing ? Utils.formatTimeStamp(dueDate, DUE_DATE_FORMAT) : ``;
+  const time = isDateShowing ? Utils.formatTimeStamp(dueDate, DUE_TIME_FORMAT) : ``;
 
   const hashtags = createHashtagsMarkup(Array.from(tags));
   const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;

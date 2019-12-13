@@ -1,4 +1,5 @@
 import {Filters, DAYS, ONE_TASKS_PAGE_COUNT, RANDOM_LIMIT, MIN_RANDOM_NUMBER, DIRECTION_POSITIVE, DIRECTION_NEGATIVE, MIN_DAY_LIMIT, MAX_DAY_LIMIT, RenderPosition} from './const.js';
+import moment from 'moment';
 
 export default class Utils {
 
@@ -48,13 +49,8 @@ export default class Utils {
     return items[index];
   }
 
-  static formatTime(date) {
-    const hours = this.getFormatedValue(date.getHours() % 12);
-    const minutes = this.getFormatedValue(date.getMinutes());
-
-    const interval = date.getHours() > 11 ? `pm` : `am`;
-
-    return `${hours}:${minutes} ${interval}`;
+  static formatTimeStamp(date, format) {
+    return moment(date).format(format);
   }
 
   static getTasksByPageNumber(tasks, pageNumber, countTasks = ONE_TASKS_PAGE_COUNT) {
@@ -78,7 +74,7 @@ export default class Utils {
 
       case Filters.TODAY:
         return tasks.reduce((total, task) => {
-          if (task.dueDate !== null && task.dueDate.getDate() === currentDate.getDate()) {
+          if (task.dueDate !== null && new Date(task.dueDate).getDate() === currentDate.getDate()) {
             total++;
           }
           return total;

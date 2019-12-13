@@ -22,7 +22,7 @@ const createRepeatingDays = () => {
 };
 
 const createTask = () => {
-  const dueDate = Utils.getRandomBoolean() ? null : Utils.getRandomDate();
+  const dueDate = Utils.getRandomBoolean() ? null : Utils.getRandomDate().valueOf();
 
   const id = taskIdCounter++;
 

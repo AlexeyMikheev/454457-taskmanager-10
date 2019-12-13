@@ -1,7 +1,7 @@
-import {COLORS, DAYS, MONTHS} from '../const.js';
-import Utils from '../utils.js';
+import {COLORS, DAYS, DUE_DATE_EDIT_FORMAT} from '../const.js';
 import AbstractSmartComponent from './abstract-smart-component.js';
 import flatpickr from 'flatpickr';
+import moment from 'moment';
 
 const createColorsMarkup = (colors, currentColor) => {
   return colors
@@ -82,17 +82,6 @@ export const getTaskEditTemplate = (task, options = {}) => {
   const isExpired = dueDate instanceof Date && dueDate < Date.now();
   const isBlockSaveButton = (isDateShowing && isRepeatingTask) || (isRepeatingTask && !isRepeating(activeRepeatingDays));
 
-  let date = ``;
-
-  if (isDateShowing) {
-    if (dueDate === null) {
-      dueDate = new Date();
-    }
-    date = `${dueDate.getDate()} ${MONTHS[dueDate.getMonth()]}`;
-  }
-
-  const time = isDateShowing ? Utils.formatTime(dueDate) : ``;
-
   const repeatClass = isRepeatingTask ? `card--repeat` : ``;
   const deadlineClass = isExpired ? `card--deadline` : ``;
 
@@ -134,7 +123,6 @@ export const getTaskEditTemplate = (task, options = {}) => {
                                           type="text"
                                           placeholder=""
                                           name="date"
-                                          value="${date} ${time}"
                                         />
                                       </label>
                                     </fieldset>` : ``}
@@ -212,6 +200,14 @@ export default class TaskEdit extends AbstractSmartComponent {
     this._onSubmitFormCb = (evt) =>{
       evt.preventDefault();
 
+      if (this._flatpickr !== null) {
+        const dueDateMoment = moment(this._flatpickr.selectedDates[0].valueOf());
+
+        if (dueDateMoment.isValid()) {
+          this._dueDate = dueDateMoment.valueOf();
+        }
+      }
+
       const dueDate = this._dueDate;
       const isDateShowing = this._isDateShowing;
       const isRepeatingTask = this._isRepeatingTask;
@@ -286,11 +282,15 @@ export default class TaskEdit extends AbstractSmartComponent {
 
     if (this._isDateShowing) {
       const dateElement = this.getElement().querySelector(`.card__date`);
+
       this._flatpickr = flatpickr(dateElement, {
         altInput: true,
         allowInput: true,
+        enableTime: true,
+        dateFormat: DUE_DATE_EDIT_FORMAT,
         defaultDate: this._task.dueDate !== null ? this._task.dueDate : new Date(),
       });
+
     }
   }
 }

@@ -2,21 +2,6 @@ export const COLORS = [`black`, `yellow`, `blue`, `green`, `pink`];
 
 export const DAYS = [`mo`, `tu`, `we`, `th`, `fr`, `sa`, `su`];
 
-export const MONTHS = [
-  `January`,
-  `February`,
-  `March`,
-  `April`,
-  `May`,
-  `June`,
-  `July`,
-  `August`,
-  `September`,
-  `October`,
-  `November`,
-  `December`,
-];
-
 export const Filters = {
   ALL: `all`,
   OVERDUE: `overdue`,
@@ -73,3 +58,9 @@ export const TaskControllerMode = {
   DEFAULT: `default`,
   EDIT: `edit`,
 };
+
+export const DUE_DATE_FORMAT = `DD MMMM`;
+
+export const DUE_TIME_FORMAT = `hh:mm A`;
+
+export const DUE_DATE_EDIT_FORMAT = `MMMM dd, YYYY hh:mm K`;
