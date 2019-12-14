@@ -1,6 +1,7 @@
 import {COLORS, DAYS, DUE_DATE_EDIT_FORMAT} from '../const.js';
 import AbstractSmartComponent from './abstract-smart-component.js';
 import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 import moment from 'moment';
 
 const createColorsMarkup = (colors, currentColor) => {
