@@ -1,4 +1,3 @@
-import Utils from '../utils.js';
 import AbstractComponent from './abstract-component.js';
 
 const MIN_ITEMS = 0;
@@ -6,7 +5,7 @@ const MIN_ITEMS = 0;
 const createFilterContentTemplate = (filter) => {
 
   const {name, count} = filter;
-  let filterChecked = Utils.getRandomBoolean();
+  let filterChecked = false;
   const filterDisabled = count <= MIN_ITEMS;
 
   if (filterDisabled) {

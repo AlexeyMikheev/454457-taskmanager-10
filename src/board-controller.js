@@ -125,7 +125,7 @@ export default class BoardController {
 
     if (this._menuFilter === null) {
       this._menuFilter = new MenuFilter(this._filters);
-      this._menuFilter .removeExist();
+      this._menuFilter.removeExist();
       Utils.render(this._mainContainer, this._menuFilter.getElement(), RenderPosition.BEFOREEND);
     } else {
       const newMenuFilter = new MenuFilter(this._filters);
