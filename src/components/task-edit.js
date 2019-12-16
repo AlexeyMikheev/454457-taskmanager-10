@@ -168,6 +168,7 @@ export const getTaskEditTemplate = (task, options = {}) => {
             </div>
         </div>
       </form>
+  </article>`
   );
 };
 
