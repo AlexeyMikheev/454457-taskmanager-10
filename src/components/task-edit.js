@@ -166,9 +166,9 @@ export const getTaskEditTemplate = (task, options = {}) => {
               <button class="card__save" type="submit" ${isBlockSaveButton ? `disabled` : ``}>save</button>
               <button class="card__delete" type="button">delete</button>
             </div>
-          </div>
-        </form>
       </article>`
+        </div>
+      </form>
   );
 };
 
